@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">Fifa Gen</string>
+    <string name="generate">Generate</string>
+    <string name="change_settings">Change Settings</string>
+    <string name="country">Country</string>
+    <string name="home">Home</string>
+    <string name="def">DEF</string>
+    <string name="mid">MID</string>
+    <string name="att">ATT</string>
+    <string name="xx">XX</string>
+    <string name="league">League</string>
+    <string name="away">Away</string>
+    <string name="todo">TODO</string>
+    <string name="login">Login</string>
+    <string name="register">Register</string>
+    <string name="password">Password</string>
+    <string name="email">Email</string>
+    <string name="already_have_an_account_login">Already have an account? Login</string>
+    <string name="don_t_have_an_account_register">Don\'t have an account? Register</string>
+    <string name="profile">Profile</string>
+    <string name="forgot_password_recover_here">Forgot Password? Recover here</string>
+</resources>

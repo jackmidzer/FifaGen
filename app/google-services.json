@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "53517320689",
+    "firebase_url": "https://fifagen-cd160.firebaseio.com",
+    "project_id": "fifagen-cd160",
+    "storage_bucket": "fifagen-cd160.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:53517320689:android:6d8793143d6264744c4450",
+        "android_client_info": {
+          "package_name": "com.jack.fifagen"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "53517320689-0p6m5abp95pvvkbh60h5ska7lbjrgj2q.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.jack.fifagen",
+            "certificate_hash": "49a7beeeaa14c4632604c41e0a585b3712e7fade"
+          }
+        },
+        {
+          "client_id": "53517320689-epr30atsi60vs74f31l34o6eook4ovs2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBL30e9_mtqGoCxc54mXWFYF1yieQHutVc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "53517320689-epr30atsi60vs74f31l34o6eook4ovs2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
