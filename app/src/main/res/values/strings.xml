@@ -19,4 +19,5 @@
     <string name="don_t_have_an_account_register">Don\'t have an account? Register</string>
     <string name="profile">Profile</string>
     <string name="forgot_password_recover_here">Forgot Password? Recover here</string>
+    <string name="users">Users</string>
 </resources>
