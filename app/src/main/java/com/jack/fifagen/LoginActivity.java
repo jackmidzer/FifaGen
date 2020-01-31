@@ -264,22 +264,25 @@ public class LoginActivity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             FirebaseUser user = mAuth.getCurrentUser();
 
-                            //get user email and uid from auth
-                            String email = user.getEmail();
-                            String uid = user.getUid();
-                            //store user info in firebase db using hashmap
-                            HashMap<Object, String> hashMap = new HashMap<>();
-                            hashMap.put("email", email);
-                            hashMap.put("uid", uid);
-                            hashMap.put("name", "");
-                            hashMap.put("phone", "");
-                            hashMap.put("image", "");
-                            //firebase db instance
-                            FirebaseDatabase database = FirebaseDatabase.getInstance();
-                            //path to store user data data named users
-                            DatabaseReference reference = database.getReference("users");
-                            //put data within hashmap in database
-                            reference.child(uid).setValue(hashMap);
+                            //iff user signing in first time then get and show info from google account
+                            if (task.isSuccessful()) {
+                                //get user email and uid from auth
+                                String email = user.getEmail();
+                                String uid = user.getUid();
+                                //store user info in firebase db using hashmap
+                                HashMap<Object, String> hashMap = new HashMap<>();
+                                hashMap.put("email", email);
+                                hashMap.put("uid", uid);
+                                hashMap.put("name", "");
+                                hashMap.put("phone", "");
+                                hashMap.put("image", "");
+                                //firebase db instance
+                                FirebaseDatabase database = FirebaseDatabase.getInstance();
+                                //path to store user data data named users
+                                DatabaseReference reference = database.getReference("users");
+                                //put data within hashmap in database
+                                reference.child(uid).setValue(hashMap);
+                            }
 
                             //show user email in toast
                             Toast.makeText(LoginActivity.this, ""+user.getEmail(), Toast.LENGTH_SHORT).show();
