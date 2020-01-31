@@ -3,19 +3,19 @@ package com.jack.fifagen;
 public class Team {
 
     private final String name;
-    private final Integer badge;
+    private final int badge;
     private final String league;
-    private final Integer logo;
+    private final int logo;
     private final String country;
-    private final Integer flag;
-    private final Integer defence;
-    private final Integer midfield;
-    private final Integer attack;
-    private final Integer overall;
+    private final int flag;
+    private final int defence;
+    private final int midfield;
+    private final int attack;
+    private final int overall;
     private final Float rating;
 
 
-    public Team(String name, Integer badge, String league,Integer logo, String country, Integer flag, Integer defence, Integer midfield, Integer attack, Integer overall, Float rating) {
+    Team(String name, int badge, String league, int logo, String country, int flag, int defence, int midfield, int attack, int overall, Float rating) {
         this.name = name;
         this.badge = badge;
         this.league = league;
@@ -29,47 +29,47 @@ public class Team {
         this.rating = rating;
     }
 
-    public String getName() {
+    String getName() {
         return this.name;
     }
 
-    public Integer getBadge() {
+    int getBadge() {
         return this.badge;
     }
 
-    public String getLeague() {
+    String getLeague() {
         return this.league;
     }
 
-    public Integer getLogo() {
+    int getLogo() {
         return this.logo;
     }
 
-    public String getCountry() {
+    String getCountry() {
         return this.country;
     }
 
-    public Integer getFlag() {
+    int getFlag() {
         return this.flag;
     }
 
-    public Integer getDefence() {
+    int getDefence() {
         return this.defence;
     }
 
-    public Integer getMidfield() {
+    int getMidfield() {
         return this.midfield;
     }
 
-    public Integer getAttack() {
+    int getAttack() {
         return this.attack;
     }
 
-    public Integer getOverall() {
+    int getOverall() {
         return this.overall;
     }
 
-    public Float getRating() {
+    Float getRating() {
         return this.rating;
     }
 }

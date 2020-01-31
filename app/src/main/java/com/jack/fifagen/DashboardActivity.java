@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.TextView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -21,9 +20,6 @@ public class DashboardActivity extends AppCompatActivity {
     public FirebaseAuth firebaseAuth;
 
     public ActionBar actionBar;
-
-    //views
-    //public TextView titleTv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,11 +86,7 @@ public class DashboardActivity extends AppCompatActivity {
     private void checkUserStatus() {
         //get current user
         FirebaseUser user = firebaseAuth.getCurrentUser();
-        if (user != null) {
-            //user is signed in, stay here
-            //set email of logged in user
-            //titleTv.setText(user.getEmail());
-        }else {
+        if (user == null) {
             //user not signed in, go to main activity
             startActivity(new Intent(DashboardActivity.this, MainActivity.class));
             finish();

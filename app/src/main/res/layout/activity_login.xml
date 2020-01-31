@@ -109,6 +109,6 @@
         android:layout_marginRight="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recoverId"></com.google.android.gms.common.SignInButton>
+        app:layout_constraintTop_toBottomOf="@+id/recoverId" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
