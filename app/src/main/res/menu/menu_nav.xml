@@ -13,4 +13,8 @@
         android:title="@string/users"
         android:icon="@drawable/ic_users_black" />
 
+    <item android:id="@+id/chatListId"
+        android:title="@string/chats"
+        android:icon="@drawable/ic_chat_black" />
+
 </menu>

@@ -1,4 +1,4 @@
-package com.jack.fifagen;
+package com.jack.fifagen.Models;
 
 public class ModelUser {
 

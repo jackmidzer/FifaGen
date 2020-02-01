@@ -1,6 +1,7 @@
-package com.jack.fifagen;
+package com.jack.fifagen.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,9 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.jack.fifagen.ChatActivity;
+import com.jack.fifagen.Models.ModelUser;
+import com.jack.fifagen.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -21,7 +25,7 @@ public class AdapterUsers extends RecyclerView.Adapter<AdapterUsers.MyHolder>{
     private List<ModelUser> userList;
 
     //constructor
-    AdapterUsers(Context context, List<ModelUser> userList) {
+    public AdapterUsers(Context context, List<ModelUser> userList) {
         this.context = context;
         this.userList = userList;
     }
@@ -37,6 +41,7 @@ public class AdapterUsers extends RecyclerView.Adapter<AdapterUsers.MyHolder>{
     @Override
     public void onBindViewHolder(@NonNull MyHolder myHolder, int i) {
         //get data
+        final String userUid = userList.get(i).getUid();
         String userAvatar = userList.get(i).getAvatar();
         String userName = userList.get(i).getName();
         final String userEmail = userList.get(i).getEmail();
@@ -55,7 +60,10 @@ public class AdapterUsers extends RecyclerView.Adapter<AdapterUsers.MyHolder>{
         myHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context, ""+userEmail, Toast.LENGTH_SHORT).show();
+                //start chatting/messaging with user
+                Intent intent = new Intent(context, ChatActivity.class);
+                intent.putExtra("userUid", userUid);
+                context.startActivity(intent);
             }
         });
 
