@@ -107,7 +107,7 @@ public class ProfileFragment extends Fragment {
         firebaseAuth = FirebaseAuth.getInstance();
         user = firebaseAuth.getCurrentUser();
         database = FirebaseDatabase.getInstance();
-        databaseReference = database.getReference("users");
+        databaseReference = database.getReference("Users");
         storageReference = getInstance().getReference();
 
         //init permissions arrays
@@ -140,21 +140,29 @@ public class ProfileFragment extends Fragment {
                     String cover = "" + ds.child("cover").getValue();
 
                     //set data to the views
-                    nameTv.setText(name);
-                    emailTv.setText(email);
-                    phoneTv.setText(phone);
-                    try {
-                        //set the profile picture
-                        Picasso.get().load(avatar).into(avatarIv);
-                    }catch (Exception e) {
-                        //set a default image
-                        Picasso.get().load(R.drawable.ic_default_img_white).into(avatarIv);
+                    if (!name.isEmpty()) {
+                        nameTv.setText(name);
                     }
-                    try {
-                        //set the cover photo
-                        Picasso.get().load(cover).into(coverIv);
-                    }catch (Exception e) {
-                        //set a default image
+                    emailTv.setText(email);
+                    if (!phone.isEmpty()) {
+                        phoneTv.setText(phone);
+                    }
+                    if (!avatar.isEmpty()) {
+                        try {
+                            //set the profile picture
+                            Picasso.get().load(avatar).placeholder(R.drawable.ic_default_img_white).into(avatarIv);
+                        } catch (Exception e) {
+                            //set a default image
+                            Picasso.get().load(R.drawable.ic_default_img_white).into(avatarIv);
+                        }
+                    }
+                    if (!cover.isEmpty()) {
+                        try {
+                            //set the cover photo
+                            Picasso.get().load(cover).into(coverIv);
+                        } catch (Exception e) {
+                            //set a default image
+                        }
                     }
                 }
             }
@@ -275,7 +283,7 @@ public class ProfileFragment extends Fragment {
                         public void onFailure(@NonNull Exception e) {
                             //failed, dismiss progress dialog, get and show error message
                             progressDialog.dismiss();
-                            Toast.makeText(getActivity(), ""+e.getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), "ProfileFragment <1>: "+e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     });
                 }
@@ -426,7 +434,7 @@ public class ProfileFragment extends Fragment {
             public void onFailure(@NonNull Exception e) {
                 //some error(s), get and show error message, dismiss progress dialog
                 progressDialog.dismiss();
-                Toast.makeText(getActivity(), ""+e.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "ProfileFragment <2>: "+e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }

@@ -191,7 +191,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onFailure(@NonNull Exception e) {
                 progressDialog.dismiss();
-                Toast.makeText(LoginActivity.this, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoginActivity.this, "LoginActivity <1>: "+e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -222,7 +222,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onFailure(@NonNull Exception e) {
                 //error, dismiss progress dialog and get and show error message
                 progressDialog.dismiss();
-                Toast.makeText(LoginActivity.this, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoginActivity.this, "LoginActivity <2>: "+e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -247,7 +247,7 @@ public class LoginActivity extends AppCompatActivity {
                 firebaseAuthWithGoogle(account);
             } catch (ApiException e) {
                 // Google Sign In failed, update UI appropriately
-                Toast.makeText(LoginActivity.this, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoginActivity.this, "LoginActivity <3>: "+e.getMessage(), Toast.LENGTH_SHORT).show();
                 // ...
             }
         }
@@ -264,7 +264,7 @@ public class LoginActivity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             FirebaseUser user = mAuth.getCurrentUser();
 
-                            //iff user signing in first time then get and show info from google account
+                            //if user signing in first time then get and show info from google account
                             if (task.isSuccessful()) {
                                 //get user email and uid from auth
                                 String email = user.getEmail();
@@ -280,7 +280,7 @@ public class LoginActivity extends AppCompatActivity {
                                 //firebase db instance
                                 FirebaseDatabase database = FirebaseDatabase.getInstance();
                                 //path to store user data data named users
-                                DatabaseReference reference = database.getReference("users");
+                                DatabaseReference reference = database.getReference("Users");
                                 //put data within hashmap in database
                                 reference.child(uid).setValue(hashMap);
                             }
@@ -303,7 +303,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onFailure(@NonNull Exception e) {
                 //get and show error message
-                Toast.makeText(LoginActivity.this, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoginActivity.this, "LoginActivity <4>: "+e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }

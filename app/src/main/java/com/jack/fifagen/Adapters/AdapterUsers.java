@@ -53,7 +53,7 @@ public class AdapterUsers extends RecyclerView.Adapter<AdapterUsers.MyHolder>{
             Picasso.get().load(userAvatar).placeholder(R.drawable.ic_default_img).into(myHolder.avatarIv);
         }
         catch (Exception e) {
-            Toast.makeText(context, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
+            //Toast.makeText(context, "AdapterUsers <1>: "+e.getMessage(), Toast.LENGTH_SHORT).show();
         }
 
         //handle item click

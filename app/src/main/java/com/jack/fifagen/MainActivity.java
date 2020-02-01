@@ -13,6 +13,7 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
+    //22videos - 8 hours 32 minutes 05 seconds
 
     //views
     public TextView homeTeam;
