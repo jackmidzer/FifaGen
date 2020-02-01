@@ -5,12 +5,9 @@
     android:layout_height="match_parent"
     tools:context=".UsersFragment">
 
-    <TextView
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:textAlignment="center"
-    android:textSize="28sp"
-    android:gravity="center"
-    android:text="@string/users" />
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/users_recyclerViewId"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 
 </FrameLayout>
