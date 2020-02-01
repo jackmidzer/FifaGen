@@ -17,59 +17,59 @@ public class ModelUser {
         this.search = search;
     }
 
-    String getName() {
+    public String getName() {
         return name;
     }
 
-    void setName(String name) {
+    public void setName(String name) {
         this.name = name;
     }
 
-    String getEmail() {
+    public String getEmail() {
         return email;
     }
 
-    void setEmail(String email) {
+    public void setEmail(String email) {
         this.email = email;
     }
 
-    String getPhone() {
+    public String getPhone() {
         return phone;
     }
 
-    void setPhone(String phone) {
+    public void setPhone(String phone) {
         this.phone = phone;
     }
 
-    String getAvatar() {
+    public String getAvatar() {
         return avatar;
     }
 
-    void setAvatar(String avatar) {
+    public void setAvatar(String avatar) {
         this.avatar = avatar;
     }
 
-    String getCover() {
+    public String getCover() {
         return cover;
     }
 
-    void setCover(String cover) {
+    public void setCover(String cover) {
         this.cover = cover;
     }
 
-    String getUid() {
+    public String getUid() {
         return uid;
     }
 
-    void setUid(String uid) {
+    public void setUid(String uid) {
         this.uid = uid;
     }
 
-    String getSearch() {
+    public String getSearch() {
         return search;
     }
 
-    void setSearch(String search) {
+    public void setSearch(String search) {
         this.search = search;
     }
 }
