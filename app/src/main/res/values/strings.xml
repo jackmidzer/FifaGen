@@ -23,4 +23,6 @@
     <string name="name">Name</string>
     <string name="phone">Phone</string>
     <string name="logout">Logout</string>
+    <string name="person_name">Person Name</string>
+    <string name="person_email">Person Email</string>
 </resources>
