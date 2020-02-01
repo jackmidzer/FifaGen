@@ -237,6 +237,8 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        progressDialog.setMessage("Signing In...");
+        progressDialog.show();
 
         // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
@@ -261,11 +263,13 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
+                            progressDialog.setMessage("Signing In...");
+                            progressDialog.show();
+                            // Sign in success
                             FirebaseUser user = mAuth.getCurrentUser();
 
                             //if user signing in first time then get and show info from google account
-                            if (task.isSuccessful()) {
+                            if (task.getResult().getAdditionalUserInfo().isNewUser()) {
                                 //get user email and uid from auth
                                 String email = user.getEmail();
                                 String uid = user.getUid();
@@ -285,6 +289,7 @@ public class LoginActivity extends AppCompatActivity {
                                 reference.child(uid).setValue(hashMap);
                             }
 
+                            progressDialog.dismiss();
                             //show user email in toast
                             Toast.makeText(LoginActivity.this, ""+user.getEmail(), Toast.LENGTH_SHORT).show();
                             //goto profile activity after login
