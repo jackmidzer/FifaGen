@@ -13,7 +13,6 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
@@ -64,7 +63,6 @@ public class ProfileFragment extends Fragment {
     private FirebaseDatabase database;
     private DatabaseReference databaseReference;
     private StorageReference storageReference;
-    String storagePath = "Users_Profile_Cover_Imgs/";
 
     //views
     private ImageView avatarIv;
@@ -72,7 +70,7 @@ public class ProfileFragment extends Fragment {
     private TextView nameTv;
     private TextView emailTv;
     private TextView phoneTv;
-    public FloatingActionButton editFab;
+    private FloatingActionButton editFab;
 
     //progress dialog
     private ProgressDialog progressDialog;
@@ -98,8 +96,7 @@ public class ProfileFragment extends Fragment {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
@@ -107,7 +104,7 @@ public class ProfileFragment extends Fragment {
         firebaseAuth = FirebaseAuth.getInstance();
         user = firebaseAuth.getCurrentUser();
         database = FirebaseDatabase.getInstance();
-        databaseReference = database.getReference("users");
+        databaseReference = database.getReference("Users");
         storageReference = getInstance().getReference();
 
         //init permissions arrays
@@ -140,21 +137,29 @@ public class ProfileFragment extends Fragment {
                     String cover = "" + ds.child("cover").getValue();
 
                     //set data to the views
-                    nameTv.setText(name);
-                    emailTv.setText(email);
-                    phoneTv.setText(phone);
-                    try {
-                        //set the profile picture
-                        Picasso.get().load(avatar).into(avatarIv);
-                    }catch (Exception e) {
-                        //set a default image
-                        Picasso.get().load(R.drawable.ic_default_img_white).into(avatarIv);
+                    if (!name.isEmpty()) {
+                        nameTv.setText(name);
                     }
-                    try {
-                        //set the cover photo
-                        Picasso.get().load(cover).into(coverIv);
-                    }catch (Exception e) {
-                        //set a default image
+                    emailTv.setText(email);
+                    if (!phone.isEmpty()) {
+                        phoneTv.setText(phone);
+                    }
+                    if (!avatar.isEmpty()) {
+                        try {
+                            //set the profile picture
+                            Picasso.get().load(avatar).placeholder(R.drawable.ic_default_img_white).into(avatarIv);
+                        } catch (Exception e) {
+                            //set a default image
+                            Picasso.get().load(R.drawable.ic_default_img_white).into(avatarIv);
+                        }
+                    }
+                    if (!cover.isEmpty()) {
+                        try {
+                            //set the cover photo
+                            Picasso.get().load(cover).into(coverIv);
+                        } catch (Exception e) {
+                            //set a default image
+                        }
                     }
                 }
             }
@@ -190,8 +195,7 @@ public class ProfileFragment extends Fragment {
 
     private boolean checkCameraPermission() {
         //check if storage permission is enabled or not
-        boolean result = ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
-        return result;
+        return ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
     }
 
     private void requestCameraPermission() {
@@ -275,7 +279,7 @@ public class ProfileFragment extends Fragment {
                         public void onFailure(@NonNull Exception e) {
                             //failed, dismiss progress dialog, get and show error message
                             progressDialog.dismiss();
-                            Toast.makeText(getActivity(), ""+e.getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), "ProfileFragment <1>: "+e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     });
                 }
@@ -384,6 +388,7 @@ public class ProfileFragment extends Fragment {
         progressDialog.show();
 
         //path and name of image to be stored in firebase storage
+        String storagePath = "Users_Profile_Cover_Imgs/";
         String filePathName = storagePath + "" + profileOrCoverPhoto + "" + user.getUid();
 
         StorageReference storageReference1 = storageReference.child(filePathName);
@@ -426,7 +431,7 @@ public class ProfileFragment extends Fragment {
             public void onFailure(@NonNull Exception e) {
                 //some error(s), get and show error message, dismiss progress dialog
                 progressDialog.dismiss();
-                Toast.makeText(getActivity(), ""+e.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "ProfileFragment <2>: "+e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -470,7 +475,7 @@ public class ProfileFragment extends Fragment {
 
     //inflate options menu
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater inflater) {
         //inflating menu
         inflater.inflate(R.menu.menu_main, menu);
         super.onCreateOptionsMenu(menu, inflater);

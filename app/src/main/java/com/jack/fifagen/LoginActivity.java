@@ -191,7 +191,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onFailure(@NonNull Exception e) {
                 progressDialog.dismiss();
-                Toast.makeText(LoginActivity.this, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoginActivity.this, "LoginActivity <1>: "+e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -222,7 +222,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onFailure(@NonNull Exception e) {
                 //error, dismiss progress dialog and get and show error message
                 progressDialog.dismiss();
-                Toast.makeText(LoginActivity.this, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoginActivity.this, "LoginActivity <2>: "+e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -237,6 +237,8 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        progressDialog.setMessage("Signing In...");
+        progressDialog.show();
 
         // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
@@ -247,7 +249,7 @@ public class LoginActivity extends AppCompatActivity {
                 firebaseAuthWithGoogle(account);
             } catch (ApiException e) {
                 // Google Sign In failed, update UI appropriately
-                Toast.makeText(LoginActivity.this, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoginActivity.this, "LoginActivity <3>: "+e.getMessage(), Toast.LENGTH_SHORT).show();
                 // ...
             }
         }
@@ -261,11 +263,13 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
+                            progressDialog.setMessage("Signing In...");
+                            progressDialog.show();
+                            // Sign in success
                             FirebaseUser user = mAuth.getCurrentUser();
 
-                            //iff user signing in first time then get and show info from google account
-                            if (task.isSuccessful()) {
+                            //if user signing in first time then get and show info from google account
+                            if (task.getResult().getAdditionalUserInfo().isNewUser()) {
                                 //get user email and uid from auth
                                 String email = user.getEmail();
                                 String uid = user.getUid();
@@ -274,17 +278,20 @@ public class LoginActivity extends AppCompatActivity {
                                 hashMap.put("email", email);
                                 hashMap.put("uid", uid);
                                 hashMap.put("name", "");
+                                hashMap.put("onlineStatus", "online");
+                                hashMap.put("typingTo", "noOne");
                                 hashMap.put("phone", "");
                                 hashMap.put("avatar", "");
                                 hashMap.put("cover", "");
                                 //firebase db instance
                                 FirebaseDatabase database = FirebaseDatabase.getInstance();
                                 //path to store user data data named users
-                                DatabaseReference reference = database.getReference("users");
+                                DatabaseReference reference = database.getReference("Users");
                                 //put data within hashmap in database
                                 reference.child(uid).setValue(hashMap);
                             }
 
+                            progressDialog.dismiss();
                             //show user email in toast
                             Toast.makeText(LoginActivity.this, ""+user.getEmail(), Toast.LENGTH_SHORT).show();
                             //goto profile activity after login
@@ -303,7 +310,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onFailure(@NonNull Exception e) {
                 //get and show error message
-                Toast.makeText(LoginActivity.this, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoginActivity.this, "LoginActivity <4>: "+e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }

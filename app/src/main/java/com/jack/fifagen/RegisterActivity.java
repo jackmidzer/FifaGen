@@ -116,13 +116,15 @@ public class RegisterActivity extends AppCompatActivity {
                     hashMap.put("email", email);
                     hashMap.put("uid", uid);
                     hashMap.put("name", "");
+                    hashMap.put("onlineStatus", "online");
+                    hashMap.put("typingTo", "noOne");
                     hashMap.put("phone", "");
                     hashMap.put("avatar", "");
                     hashMap.put("cover", "");
                     //firebase db instance
                     FirebaseDatabase database = FirebaseDatabase.getInstance();
                     //path to store user data data named users
-                    DatabaseReference reference = database.getReference("users");
+                    DatabaseReference reference = database.getReference("Users");
                     //put data within hashmap in database
                     reference.child(uid).setValue(hashMap);
 
@@ -140,7 +142,7 @@ public class RegisterActivity extends AppCompatActivity {
             public void onFailure(@NonNull Exception e) {
                 //error, dismiss dialog and get and show error message
                 progressDialog.dismiss();
-                Toast.makeText(RegisterActivity.this, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(RegisterActivity.this, "RegisterActivity <1>: "+e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }

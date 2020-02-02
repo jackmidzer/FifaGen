@@ -7,7 +7,6 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.MenuItem;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -76,6 +75,14 @@ public class DashboardActivity extends AppCompatActivity {
                     FragmentTransaction ft3 = getSupportFragmentManager().beginTransaction();
                     ft3.replace(R.id.contentId, fragment3, "");
                     ft3.commit();
+                    return true;
+                case R.id.chatListId:
+                    //users fragment transaction
+                    actionBar.setTitle("Chats");
+                    ChatListFragment fragment4 = new ChatListFragment();
+                    FragmentTransaction ft4 = getSupportFragmentManager().beginTransaction();
+                    ft4.replace(R.id.contentId, fragment4, "");
+                    ft4.commit();
                     return true;
             }
 

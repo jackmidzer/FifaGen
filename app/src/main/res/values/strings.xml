@@ -25,4 +25,18 @@
     <string name="logout">Logout</string>
     <string name="person_name">Person Name</string>
     <string name="person_email">Person Email</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="chats">Chats</string>
+    <string name="start_typing">Start Typing</string>
+    <string name="add_phone_number">Add Phone Number</string>
+    <string name="add_name">Add Name</string>
+    <string name="delivered">Delivered</string>
+    <string name="seen">Seen</string>
+    <string name="my_message">My Message</string>
+    <string name="_01_02_2020_19_39pm">01/02/2020 19:39PM</string>
+    <string name="their_message">Their Message</string>
+    <string name="chat_list">Chat List</string>
+    <string name="online">online</string>
+    <string name="search">Search</string>
+    <string name="typing">typing…</string>
 </resources>

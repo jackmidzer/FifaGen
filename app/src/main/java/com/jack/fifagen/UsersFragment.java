@@ -27,6 +27,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.jack.fifagen.Adapters.AdapterUsers;
+import com.jack.fifagen.Models.ModelUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +40,7 @@ import java.util.List;
 public class UsersFragment extends Fragment {
 
     //firebase auth
-    public FirebaseAuth firebaseAuth;
+    private FirebaseAuth firebaseAuth;
 
     private RecyclerView recyclerView;
     private AdapterUsers adapterUsers;
@@ -77,7 +79,7 @@ public class UsersFragment extends Fragment {
     private void getAllUsers() {
         //get current user
         final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("users");
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users");
 
         //get all data
         reference.addValueEventListener(new ValueEventListener() {
@@ -108,7 +110,7 @@ public class UsersFragment extends Fragment {
     private void searchUsers(final String query) {
         //get current user
         final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("users");
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users");
 
         //get all data
         reference.addValueEventListener(new ValueEventListener() {
