@@ -12,6 +12,7 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,6 +22,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -29,15 +36,23 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.gson.Gson;
 import com.jack.fifagen.Adapters.AdapterChat;
 import com.jack.fifagen.Models.ModelChat;
+import com.jack.fifagen.Models.ModelUser;
+import com.jack.fifagen.notifications.Data;
+import com.jack.fifagen.notifications.Sender;
+import com.jack.fifagen.notifications.Token;
 import com.squareup.picasso.Picasso;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 public class ChatActivity extends AppCompatActivity {
 
@@ -65,6 +80,11 @@ public class ChatActivity extends AppCompatActivity {
     String myUid;
     String theirAvatar;
 
+    //volley request queue for notifications
+    private RequestQueue requestQueue;
+
+    boolean notify = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,6 +100,8 @@ public class ChatActivity extends AppCompatActivity {
         statusTv = findViewById(R.id.statusId);
         inputEt = findViewById(R.id.inputId);
         sendBtn = findViewById(R.id.sendId);
+
+        requestQueue = Volley.newRequestQueue(getApplicationContext());
 
         //layout for recycler view
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
@@ -156,6 +178,7 @@ public class ChatActivity extends AppCompatActivity {
         sendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                notify = true;
                 //get text from edit text
                 String message = inputEt.getText().toString().trim();
                 //check if text is empty or not
@@ -166,6 +189,8 @@ public class ChatActivity extends AppCompatActivity {
                     //text not empty
                     sendMessage(message);
                 }
+                //reset edit text after sending message
+                inputEt.setText("");
             }
         });
 
@@ -247,7 +272,7 @@ public class ChatActivity extends AppCompatActivity {
         });
     }
 
-    private void sendMessage(String message) {
+    private void sendMessage(final String message) {
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
 
         String timestamp = String.valueOf(System.currentTimeMillis());
@@ -260,8 +285,76 @@ public class ChatActivity extends AppCompatActivity {
         hashMap.put("isSeen", false);
         databaseReference.child("Chats").push().setValue(hashMap);
 
-        //reset edit text after sending message
-        inputEt.setText("");
+        DatabaseReference database = FirebaseDatabase.getInstance().getReference("Users").child(myUid);
+        database.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                ModelUser user = dataSnapshot.getValue(ModelUser.class);
+                if (notify) {
+                    sendNotification(theirUid, user.getName(), message);
+                }
+                notify = false;
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void sendNotification(final String theirUid, final String name, final String message) {
+        DatabaseReference allTokens = FirebaseDatabase.getInstance().getReference("Tokens");
+        Query query = allTokens.orderByKey().equalTo(theirUid);
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot ds: dataSnapshot.getChildren()) {
+                    Token token = ds.getValue(Token.class);
+                    Data data = new Data(myUid, name+": "+message, "New Message", theirUid, R.drawable.ic_default_img);
+
+                    Sender sender = new Sender(data, token.getToken());
+
+                    //fcm json object request
+                    try {
+                        JSONObject senderJsonObj = new JSONObject(new Gson().toJson(sender));
+                        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest("https://fcm.googleapis.com/fcm/send", senderJsonObj, new Response.Listener<JSONObject>() {
+                            @Override
+                            public void onResponse(JSONObject response) {
+                                //response of request
+                                Log.d("JSON_RESPONSE", "onResponse: "+response.toString());
+                            }
+                        }, new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                Log.d("JSON_RESPONSE", "onResponse: "+error.toString());
+                            }
+                        }) {
+                            @Override
+                            public Map<String, String> getHeaders() throws AuthFailureError {
+                                //put params
+                                Map<String, String> headers = new HashMap<>();
+                                headers.put("Content-Type", "application/json");
+                                headers.put("Authorization", "key=AAAADHXhgfE:APA91bHNigKFUaRM3jFseSbo5OyWeO5KUB0mM_eJ2zwUzoLF7pjhFeIt8b7XtwsYiB3sjkBLMSE0OiOkQVP33rjFDx9IDt2AQ2nWUnQomKJtktCw6LdY5jFcPiUPF4kOPY0_h8A7e1P0");
+
+                                return headers;
+                            }
+                        };
+
+                        //add this request to the queue
+                        requestQueue.add(jsonObjectRequest);
+                    }
+                    catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     private void checkUserStatus() {
