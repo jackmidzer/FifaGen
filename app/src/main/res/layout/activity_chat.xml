@@ -34,7 +34,7 @@
                 android:id="@+id/nameId"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Name"
+                android:text="@string/name"
                 android:textColor="@android:color/white"
                 android:textSize="18sp"
                 android:textStyle="bold" />
@@ -43,7 +43,7 @@
                 android:id="@+id/statusId"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="online"
+                android:text="@string/online"
                 android:textColor="@android:color/white"
                 android:textStyle="bold" />
 
@@ -82,7 +82,8 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:background="@null"
-            android:src="@drawable/ic_send" />
+            android:src="@drawable/ic_send"
+            android:contentDescription="@string/todo" />
 
     </LinearLayout>
 

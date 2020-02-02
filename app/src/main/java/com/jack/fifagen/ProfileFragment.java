@@ -13,7 +13,6 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
@@ -64,7 +63,6 @@ public class ProfileFragment extends Fragment {
     private FirebaseDatabase database;
     private DatabaseReference databaseReference;
     private StorageReference storageReference;
-    String storagePath = "Users_Profile_Cover_Imgs/";
 
     //views
     private ImageView avatarIv;
@@ -72,7 +70,7 @@ public class ProfileFragment extends Fragment {
     private TextView nameTv;
     private TextView emailTv;
     private TextView phoneTv;
-    public FloatingActionButton editFab;
+    private FloatingActionButton editFab;
 
     //progress dialog
     private ProgressDialog progressDialog;
@@ -98,8 +96,7 @@ public class ProfileFragment extends Fragment {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
@@ -198,8 +195,7 @@ public class ProfileFragment extends Fragment {
 
     private boolean checkCameraPermission() {
         //check if storage permission is enabled or not
-        boolean result = ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
-        return result;
+        return ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
     }
 
     private void requestCameraPermission() {
@@ -392,6 +388,7 @@ public class ProfileFragment extends Fragment {
         progressDialog.show();
 
         //path and name of image to be stored in firebase storage
+        String storagePath = "Users_Profile_Cover_Imgs/";
         String filePathName = storagePath + "" + profileOrCoverPhoto + "" + user.getUid();
 
         StorageReference storageReference1 = storageReference.child(filePathName);
@@ -478,7 +475,7 @@ public class ProfileFragment extends Fragment {
 
     //inflate options menu
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater inflater) {
         //inflating menu
         inflater.inflate(R.menu.menu_main, menu);
         super.onCreateOptionsMenu(menu, inflater);

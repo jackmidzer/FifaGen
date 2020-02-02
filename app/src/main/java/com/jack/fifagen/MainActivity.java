@@ -16,30 +16,13 @@ public class MainActivity extends AppCompatActivity {
     //22videos - 8 hours 32 minutes 05 seconds
 
     //views
-    public TextView homeTeam;
-    public TextView awayTeam;
-    public TextView homeCountry;
-    public TextView awayCountry;
-    public TextView homeLeague;
-    public TextView awayLeague;
+    public TextView homeTeam, homeCountry, homeLeague, homeDefence, homeMidfield, homeAttack;
+    public TextView awayTeam, awayCountry, awayLeague, awayDefence, awayMidfield, awayAttack;
+    public ImageView homeBadge, homeFlag, homeLogo;
+    public ImageView awayBadge, awayFlag, awayLogo;
+    public RatingBar homeStars, awayStars;
+    public Button generate, register, login;
     public TextView settings;
-    public Button generate;
-    public RatingBar homeStars;
-    public RatingBar awayStars;
-    public ImageView homeBadge;
-    public ImageView awayBadge;
-    public TextView homeDefence;
-    public TextView homeMidfield;
-    public TextView homeAttack;
-    public TextView awayDefence;
-    public TextView awayMidfield;
-    public TextView awayAttack;
-    public ImageView homeFlag;
-    public ImageView awayFlag;
-    public ImageView homeLogo;
-    public ImageView awayLogo;
-    public Button register;
-    public Button login;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

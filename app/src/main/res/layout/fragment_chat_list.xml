@@ -10,6 +10,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:textSize="28sp"
-        android:text="Chat List" />
+        android:text="@string/chat_list" />
 
 </FrameLayout>

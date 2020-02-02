@@ -23,20 +23,20 @@
             android:id="@+id/timestampId"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="01/02/2020 19:39PM"
+            android:text="@string/_01_02_2020_19_39pm"
             android:textColor="@android:color/black"
             android:textSize="12sp" />
 
         <TextView
             android:id="@+id/messageId"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:textSize="16sp"
             android:textColor="@android:color/black"
             android:background="@drawable/bg_sender"
             android:padding="15dp"
-            android:text="My Message" />
+            android:text="@string/my_message" />
 
     </LinearLayout>
 
@@ -46,6 +46,6 @@
         android:layout_height="wrap_content"
         android:gravity="end"
         android:textAlignment="textEnd"
-        android:text="delivered" />
+        android:text="@string/delivered" />
 
 </LinearLayout>

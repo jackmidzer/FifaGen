@@ -25,12 +25,12 @@ public class AdapterChat extends RecyclerView.Adapter<AdapterChat.MyHolder> {
 
     private static final int MSG_TYPE_LEFT = 0;
     private static final int MSG_TYPE_RIGHT = 1;
-    Context context;
-    List<ModelChat> chatList;
-    String imageUrl;
+    private Context context;
+    private List<ModelChat> chatList;
+    private String imageUrl;
 
     //firebase
-    FirebaseUser user;
+    private FirebaseUser user;
 
     public AdapterChat(Context context, List<ModelChat> chatList, String imageUrl) {
         this.context = context;
@@ -69,15 +69,15 @@ public class AdapterChat extends RecyclerView.Adapter<AdapterChat.MyHolder> {
             Picasso.get().load(imageUrl).placeholder(R.drawable.ic_default_img).into(myHolder.avatarIv);
         }
         catch (Exception e ) {
-
+            Picasso.get().load(R.drawable.ic_default_img).into(myHolder.avatarIv);
         }
 
         //set seen/delivered status of message
         if (i == chatList.size()-1) {
             if (chatList.get(i).isSeen()) {
-                myHolder.deliveredTv.setText("Seen");
+                myHolder.deliveredTv.setText(R.string.seen);
             }else {
-                myHolder.deliveredTv.setText("Delivered");
+                myHolder.deliveredTv.setText(R.string.delivered);
             }
         }else {
             myHolder.deliveredTv.setVisibility(View.GONE);
@@ -107,7 +107,7 @@ public class AdapterChat extends RecyclerView.Adapter<AdapterChat.MyHolder> {
         ImageView avatarIv;
         TextView messageTv, timestampTv, deliveredTv;
 
-        public MyHolder(@NonNull View itemView) {
+        MyHolder(@NonNull View itemView) {
             super(itemView);
 
             //init views
