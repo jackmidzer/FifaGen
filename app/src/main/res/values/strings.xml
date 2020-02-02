@@ -38,5 +38,5 @@
     <string name="chat_list">Chat List</string>
     <string name="online">online</string>
     <string name="search">Search</string>
-    <string name="typing">typing...</string>
+    <string name="typing">typing…</string>
 </resources>

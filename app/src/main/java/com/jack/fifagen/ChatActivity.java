@@ -123,7 +123,7 @@ public class ChatActivity extends AppCompatActivity {
                             //convert timestamp to dd/mm/yy hh:mm am/pm
                             Calendar calendar = Calendar.getInstance(Locale.ENGLISH);
                             calendar.setTimeInMillis(Long.parseLong(onlineStatus));
-                            String dateTime = "Last seen at: " + DateFormat.format("dd/mm/yy hh:mm aa", calendar).toString();
+                            String dateTime = "Last seen at: " + DateFormat.format("dd/MM/yy hh:mm aa", calendar).toString();
                             statusTv.setText(dateTime);
                         }
                     }
@@ -277,7 +277,7 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void checkOnlineStatus(String status) {
-        DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("Users").child("myUid");
+        DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("Users").child(myUid);
         HashMap<String, Object> hashMap = new HashMap<>();
         hashMap.put("onlineStatus", status);
         //update value of online status of user
@@ -285,7 +285,7 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void checkTypingStatus(String typing) {
-        DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("Users").child("myUid");
+        DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("Users").child(myUid);
         HashMap<String, Object> hashMap = new HashMap<>();
         hashMap.put("typingTo", typing);
         //update value of online status of user

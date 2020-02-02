@@ -89,6 +89,9 @@ public class MainActivity extends AppCompatActivity {
 
                 //Away team
                 Team away_team = databaseAccess.getRandomTeam();
+                while (away_team == home_team) {
+                    away_team = databaseAccess.getRandomTeam();
+                }
                 if (away_team != null) {
                     Log.d("myTag5", "result is " + away_team);
                     awayTeam.setText(away_team.getName());
