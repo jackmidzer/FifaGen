@@ -112,7 +112,7 @@ public class ChatActivity extends AppCompatActivity {
 
         //get uid of user to be chatted with
         Intent intent = getIntent();
-        theirUid = intent.getStringExtra("userUid");
+        theirUid = intent.getStringExtra("theirUid");
 
         // Initialize Firebase
         firebaseAuth = FirebaseAuth.getInstance();
@@ -412,6 +412,12 @@ public class ChatActivity extends AppCompatActivity {
         //set online
         checkOnlineStatus("online");
         super.onResume();
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return super.onSupportNavigateUp();
     }
 
     @Override

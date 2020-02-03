@@ -1,6 +1,8 @@
 package com.jack.fifagen.Adapters;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.jack.fifagen.ChatActivity;
 import com.jack.fifagen.Models.ModelUser;
 import com.jack.fifagen.R;
+import com.jack.fifagen.TheirProfileActivity;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -40,16 +43,16 @@ public class AdapterUsers extends RecyclerView.Adapter<AdapterUsers.MyHolder>{
     @Override
     public void onBindViewHolder(@NonNull MyHolder myHolder, int i) {
         //get data
-        final String userUid = userList.get(i).getUid();
-        String userAvatar = userList.get(i).getAvatar();
-        String userName = userList.get(i).getName();
-        final String userEmail = userList.get(i).getEmail();
+        final String theirUid = userList.get(i).getUid();
+        String theirAvatar = userList.get(i).getAvatar();
+        String theirName = userList.get(i).getName();
+        final String theirEmail = userList.get(i).getEmail();
 
         //set data
-        myHolder.nameTv.setText(userName);
-        myHolder.emailTv.setText(userEmail);
+        myHolder.nameTv.setText(theirName);
+        myHolder.emailTv.setText(theirEmail);
         try {
-            Picasso.get().load(userAvatar).placeholder(R.drawable.ic_default_img).into(myHolder.avatarIv);
+            Picasso.get().load(theirAvatar).placeholder(R.drawable.ic_default_img).into(myHolder.avatarIv);
         }
         catch (Exception e) {
             //Toast.makeText(context, "AdapterUsers <1>: "+e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -59,10 +62,26 @@ public class AdapterUsers extends RecyclerView.Adapter<AdapterUsers.MyHolder>{
         myHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //start chatting/messaging with user
-                Intent intent = new Intent(context, ChatActivity.class);
-                intent.putExtra("userUid", userUid);
-                context.startActivity(intent);
+                //show dialog
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setItems(new String[]{"Profile", "Chat"}, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (which == 0) {
+                            //profile clicked, go to their profile
+                            Intent intent = new Intent(context, TheirProfileActivity.class);
+                            intent.putExtra("theirUid", theirUid);
+                            context.startActivity(intent);
+                        }
+                        if (which ==1) {
+                            //chat clicked, go to chat activity
+                            Intent intent = new Intent(context, ChatActivity.class);
+                            intent.putExtra("theirUid", theirUid);
+                            context.startActivity(intent);
+                        }
+                    }
+                });
+                builder.create().show();
             }
         });
 
