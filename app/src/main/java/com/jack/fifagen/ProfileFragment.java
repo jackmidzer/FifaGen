@@ -83,17 +83,17 @@ public class ProfileFragment extends Fragment {
     private String[] cameraPermissions;
     private String[] storagePermissions;
 
+    String uid;
+
     //uri of picked image
     private Uri image_uri;
 
     //for checking if profile or cover photo
     private String profileOrCoverPhoto;
 
-
     public ProfileFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -177,6 +177,11 @@ public class ProfileFragment extends Fragment {
                 showEditProfileDialog();
             }
         });
+
+        checkUserStatus();
+
+        //load stats
+        //loadMyStats();
 
         return view;
     }
@@ -285,6 +290,9 @@ public class ProfileFragment extends Fragment {
                 }
             }
         });
+
+        //update name in stats if changed
+
         //add cancel button in dialog
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
@@ -352,7 +360,7 @@ public class ProfileFragment extends Fragment {
                 //choosing from gallery
                 //check if permissions are allowed
                 if (grantResults.length > 0) {
-                    boolean writeStorageAccepted = grantResults[1] == PackageManager.PERMISSION_GRANTED;
+                    boolean writeStorageAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
                     if (writeStorageAccepted) {
                         //permissions enabled
                         pickFromGallery();
@@ -464,6 +472,8 @@ public class ProfileFragment extends Fragment {
             //user not signed in, go to main activity
             startActivity(new Intent(getActivity(), MainActivity.class));
             getActivity().finish();
+        }else {
+            uid = user.getUid();
         }
     }
 

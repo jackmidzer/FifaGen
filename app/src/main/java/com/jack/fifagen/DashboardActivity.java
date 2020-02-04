@@ -6,12 +6,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.jack.fifagen.notifications.Token;
 
 public class DashboardActivity extends AppCompatActivity {
 
@@ -19,6 +24,8 @@ public class DashboardActivity extends AppCompatActivity {
     public FirebaseAuth firebaseAuth;
 
     public ActionBar actionBar;
+
+    String mUid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +52,23 @@ public class DashboardActivity extends AppCompatActivity {
         FragmentTransaction ft1 = getSupportFragmentManager().beginTransaction();
         ft1.replace(R.id.contentId, fragment1, "");
         ft1.commit();
+
+        checkUserStatus();
+
+        //update the token
+        updateToken(FirebaseInstanceId.getInstance().getToken());
+    }
+
+    @Override
+    protected void onResume() {
+        checkUserStatus();
+        super.onResume();
+    }
+
+    public void updateToken(String token) {
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Tokens");
+        Token mToken = new Token(token);
+        ref.child(mUid).setValue(mToken);
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener selectedListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -97,6 +121,14 @@ public class DashboardActivity extends AppCompatActivity {
             //user not signed in, go to main activity
             startActivity(new Intent(DashboardActivity.this, MainActivity.class));
             finish();
+        }else {
+            mUid = user.getUid();
+
+            //save uid of currently signed in user to shared preferences
+            SharedPreferences sp = getSharedPreferences("SP_USER", MODE_PRIVATE);
+            SharedPreferences.Editor editor = sp.edit();
+            editor.putString("Current_USERID", mUid);
+            editor.apply();
         }
     }
 
