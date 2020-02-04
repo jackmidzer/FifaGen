@@ -1,4 +1,4 @@
-package com.jack.fifagen;
+package com.jack.fifagen.Activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -40,6 +40,7 @@ import com.google.gson.Gson;
 import com.jack.fifagen.Adapters.AdapterChat;
 import com.jack.fifagen.Models.ModelChat;
 import com.jack.fifagen.Models.ModelUser;
+import com.jack.fifagen.R;
 import com.jack.fifagen.notifications.Data;
 import com.jack.fifagen.notifications.Sender;
 import com.jack.fifagen.notifications.Token;
@@ -101,6 +102,7 @@ public class ChatActivity extends AppCompatActivity {
         inputEt = findViewById(R.id.inputId);
         sendBtn = findViewById(R.id.sendId);
 
+        //volley
         requestQueue = Volley.newRequestQueue(getApplicationContext());
 
         //layout for recycler view
@@ -301,6 +303,8 @@ public class ChatActivity extends AppCompatActivity {
 
             }
         });
+
+        //create chatlist node/child in firebase database
     }
 
     private void sendNotification(final String theirUid, final String name, final String message) {
@@ -396,6 +400,7 @@ public class ChatActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
+        checkUserStatus();
 
         //get timestamp
         String timestamp = String.valueOf(System.currentTimeMillis());

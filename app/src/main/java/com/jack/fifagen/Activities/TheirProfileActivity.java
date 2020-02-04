@@ -1,14 +1,12 @@
-package com.jack.fifagen;
+package com.jack.fifagen.Activities;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -20,6 +18,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.jack.fifagen.Activities.MainActivity;
+import com.jack.fifagen.R;
 import com.squareup.picasso.Picasso;
 
 public class TheirProfileActivity extends AppCompatActivity {

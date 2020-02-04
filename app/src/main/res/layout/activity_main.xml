@@ -4,36 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
+    tools:context=".Activities.MainActivity"
     android:background="@drawable/background_15">
-
-    <Button
-        android:id="@+id/generate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginBottom="16dp"
-        android:text="@string/generate"
-        app:layout_constraintBottom_toTopOf="@+id/settings"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
-        android:id="@+id/settings"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginBottom="80dp"
-        android:text="@string/change_settings"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
 
     <LinearLayout
         android:id="@+id/homeLayout"
@@ -41,10 +13,12 @@
         android:layout_height="360dp"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
+        android:layout_marginBottom="16dp"
         android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout3"
         app:layout_constraintEnd_toStartOf="@+id/awayLayout"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -52,8 +26,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:orientation="horizontal"
             android:background="#EEEEEE"
+            android:orientation="horizontal"
             android:padding="10dp">
 
             <TextView
@@ -70,9 +44,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="0.8"
+                android:contentDescription="@string/todo"
                 app:srcCompat="@drawable/qmark"
-                tools:srcCompat="@drawable/flag_45"
-                android:contentDescription="@string/todo" />
+                tools:srcCompat="@drawable/flag_45" />
         </LinearLayout>
 
         <LinearLayout
@@ -105,9 +79,9 @@
                     android:id="@+id/homeBadge"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:contentDescription="@string/todo"
                     app:srcCompat="@drawable/qmark"
-                    tools:srcCompat="@drawable/badge_241"
-                    android:contentDescription="@string/todo" />
+                    tools:srcCompat="@drawable/badge_241" />
             </LinearLayout>
 
             <LinearLayout
@@ -204,9 +178,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="0.8"
+                android:contentDescription="@string/todo"
                 app:srcCompat="@drawable/qmark"
-                tools:srcCompat="@drawable/logo_53"
-                android:contentDescription="@string/todo" />
+                tools:srcCompat="@drawable/logo_53" />
 
             <TextView
                 android:id="@+id/homeLeague"
@@ -226,10 +200,12 @@
         android:layout_height="360dp"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
+        android:layout_marginBottom="16dp"
         android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/homeLayout"
         app:layout_constraintTop_toTopOf="parent">
@@ -237,8 +213,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:orientation="horizontal"
             android:background="#EEEEEE"
+            android:orientation="horizontal"
             android:padding="10dp">
 
             <TextView
@@ -255,9 +231,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="0.8"
+                android:contentDescription="@string/todo"
                 app:srcCompat="@drawable/qmark"
-                tools:srcCompat="@drawable/flag_14"
-                android:contentDescription="@string/todo" />
+                tools:srcCompat="@drawable/flag_14" />
         </LinearLayout>
 
         <LinearLayout
@@ -290,9 +266,9 @@
                     android:id="@+id/awayBadge"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:contentDescription="@string/todo"
                     app:srcCompat="@drawable/qmark"
-                    tools:srcCompat="@drawable/badge_10"
-                    android:contentDescription="@string/todo" />
+                    tools:srcCompat="@drawable/badge_10" />
             </LinearLayout>
 
             <LinearLayout
@@ -391,9 +367,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="0.8"
+                android:contentDescription="@string/todo"
                 app:srcCompat="@drawable/qmark"
-                tools:srcCompat="@drawable/logo_13"
-                android:contentDescription="@string/todo" />
+                tools:srcCompat="@drawable/logo_13" />
 
             <TextView
                 android:id="@+id/awayLeague"
@@ -407,36 +383,40 @@
         </LinearLayout>
     </LinearLayout>
 
-    <Button
-        android:id="@+id/login"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/linearLayout3"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
         android:layout_marginBottom="16dp"
-        android:text="@string/login"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/register"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/settings" />
-
-    <Button
-        android:id="@+id/register"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginBottom="16dp"
-        android:text="@string/register"
+        android:gravity="center"
+        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/login"
-        app:layout_constraintTop_toBottomOf="@+id/settings" />
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <Button
+            android:id="@+id/generate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/generate" />
+
+        <TextView
+            android:id="@+id/settings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/change_settings"
+            android:textColor="@android:color/holo_blue_dark"
+            android:padding="4dp"/>
+
+        <TextView
+            android:id="@+id/login"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/login_here_to_save_matches_against_friends"
+            android:textColor="@android:color/holo_blue_dark"
+            android:padding="4dp"/>
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,4 +1,4 @@
-package com.jack.fifagen;
+package com.jack.fifagen.Fragments;
 
 
 import android.content.Intent;
@@ -27,8 +27,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.jack.fifagen.Activities.MainActivity;
 import com.jack.fifagen.Adapters.AdapterUsers;
 import com.jack.fifagen.Models.ModelUser;
+import com.jack.fifagen.R;
 
 import java.util.ArrayList;
 import java.util.List;

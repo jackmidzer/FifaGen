@@ -20,7 +20,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
-import com.jack.fifagen.ChatActivity;
+import com.jack.fifagen.Activities.ChatActivity;
 
 public class FirebaseMessaging extends FirebaseMessagingService {
 

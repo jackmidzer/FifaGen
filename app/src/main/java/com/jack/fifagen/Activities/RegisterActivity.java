@@ -1,4 +1,4 @@
-package com.jack.fifagen;
+package com.jack.fifagen.Activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -22,6 +22,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.jack.fifagen.DashboardActivity;
+import com.jack.fifagen.R;
 
 import java.util.HashMap;
 

@@ -1,8 +1,6 @@
 package com.jack.fifagen.Adapters;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,39 +11,39 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.jack.fifagen.Activities.ChatActivity;
 import com.jack.fifagen.Models.ModelUser;
 import com.jack.fifagen.R;
-import com.jack.fifagen.Activities.TheirProfileActivity;
+import com.jack.fifagen.Activities.SaveMatchActivity;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-public class AdapterUsers extends RecyclerView.Adapter<AdapterUsers.MyHolder>{
-
+public class AdapterOpponents extends RecyclerView.Adapter<AdapterOpponents.MyHolder> {
     private Context context;
     private List<ModelUser> userList;
+    private Intent teamInfo;
 
     //constructor
-    public AdapterUsers(Context context, List<ModelUser> userList) {
+    public AdapterOpponents(Context context, List<ModelUser> userList, Intent teamInfo) {
         this.context = context;
         this.userList = userList;
+        this.teamInfo = teamInfo;
     }
 
     @NonNull
     @Override
-    public MyHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+    public AdapterOpponents.MyHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         //inflate layout
         View view = LayoutInflater.from(context).inflate(R.layout.row_users, viewGroup, false);
-        return new MyHolder(view);
+        return new AdapterOpponents.MyHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MyHolder myHolder, int i) {
+    public void onBindViewHolder(@NonNull AdapterOpponents.MyHolder myHolder, int i) {
         //get data
         final String theirUid = userList.get(i).getUid();
         String theirAvatar = userList.get(i).getAvatar();
-        String theirName = userList.get(i).getName();
+        final String theirName = userList.get(i).getName();
         final String theirEmail = userList.get(i).getEmail();
 
         //set data
@@ -55,33 +53,26 @@ public class AdapterUsers extends RecyclerView.Adapter<AdapterUsers.MyHolder>{
             Picasso.get().load(theirAvatar).placeholder(R.drawable.ic_default_img).into(myHolder.avatarIv);
         }
         catch (Exception e) {
-            //Toast.makeText(context, "AdapterUsers <1>: "+e.getMessage(), Toast.LENGTH_SHORT).show();
+            //Toast.makeText(context, "AdapterOpponents <1>: "+e.getMessage(), Toast.LENGTH_SHORT).show();
         }
 
         //handle item click
         myHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //show dialog
-                AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                builder.setItems(new String[]{"Profile", "Chat"}, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (which == 0) {
-                            //profile clicked, go to their profile
-                            Intent intent = new Intent(context, TheirProfileActivity.class);
-                            intent.putExtra("theirUid", theirUid);
-                            context.startActivity(intent);
-                        }
-                        if (which ==1) {
-                            //chat clicked, go to chat activity
-                            Intent intent = new Intent(context, ChatActivity.class);
-                            intent.putExtra("theirUid", theirUid);
-                            context.startActivity(intent);
-                        }
-                    }
-                });
-                builder.create().show();
+                //user chosen, go to save match activity
+                Intent intent = new Intent(context, SaveMatchActivity.class);
+                intent.putExtra("theirUid", theirUid);
+                if (!theirName.isEmpty()) {
+                    intent.putExtra("theirName", theirName);
+                }else {
+                    intent.putExtra("theirName", theirEmail);
+                }
+                intent.putExtra("homeTeam", teamInfo.getStringExtra("homeTeam"));
+                intent.putExtra("awayTeam", teamInfo.getStringExtra("awayTeam"));
+                intent.putExtra("homeBadge", teamInfo.getStringExtra("homeBadge"));
+                intent.putExtra("awayBadge", teamInfo.getStringExtra("awayBadge"));
+                context.startActivity(intent);
             }
         });
 

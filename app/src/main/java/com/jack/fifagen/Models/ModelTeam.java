@@ -1,6 +1,6 @@
-package com.jack.fifagen;
+package com.jack.fifagen.Models;
 
-public class Team {
+public class ModelTeam {
 
     private final String name;
     private final int badge;
@@ -15,7 +15,7 @@ public class Team {
     private final Float rating;
 
 
-    Team(String name, int badge, String league, int logo, String country, int flag, int defence, int midfield, int attack, int overall, Float rating) {
+    public ModelTeam(String name, int badge, String league, int logo, String country, int flag, int defence, int midfield, int attack, int overall, Float rating) {
         this.name = name;
         this.badge = badge;
         this.league = league;
@@ -29,47 +29,47 @@ public class Team {
         this.rating = rating;
     }
 
-    String getName() {
+    public String getName() {
         return this.name;
     }
 
-    int getBadge() {
+    public int getBadge() {
         return this.badge;
     }
 
-    String getLeague() {
+    public String getLeague() {
         return this.league;
     }
 
-    int getLogo() {
+    public int getLogo() {
         return this.logo;
     }
 
-    String getCountry() {
+    public String getCountry() {
         return this.country;
     }
 
-    int getFlag() {
+    public int getFlag() {
         return this.flag;
     }
 
-    int getDefence() {
+    public int getDefence() {
         return this.defence;
     }
 
-    int getMidfield() {
+    public int getMidfield() {
         return this.midfield;
     }
 
-    int getAttack() {
+    public int getAttack() {
         return this.attack;
     }
 
-    int getOverall() {
+    public int getOverall() {
         return this.overall;
     }
 
-    Float getRating() {
+    public Float getRating() {
         return this.rating;
     }
 }

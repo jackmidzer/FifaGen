@@ -2,19 +2,20 @@ package com.jack.fifagen.Models;
 
 public class ModelUser {
 
-    private String name, email, phone, avatar, cover, uid, search;
+    private String name, email, phone, avatar, cover, uid, onlineStatus, typingTo;
 
     public ModelUser() {
     }
 
-    public ModelUser(String name, String email, String phone, String avatar, String cover, String uid, String search) {
+    public ModelUser(String name, String email, String phone, String avatar, String cover, String uid, String onlineStatus, String typingTo) {
         this.name = name;
         this.email = email;
         this.phone = phone;
         this.avatar = avatar;
         this.cover = cover;
         this.uid = uid;
-        this.search = search;
+        this.onlineStatus = onlineStatus;
+        this.typingTo = typingTo;
     }
 
     public String getName() {
@@ -65,11 +66,19 @@ public class ModelUser {
         this.uid = uid;
     }
 
-    public String getSearch() {
-        return search;
+    public String getOnlineStatus() {
+        return onlineStatus;
     }
 
-    public void setSearch(String search) {
-        this.search = search;
+    public void setOnlineStatus(String onlineStatus) {
+        this.onlineStatus = onlineStatus;
+    }
+
+    public String getTypingTo() {
+        return typingTo;
+    }
+
+    public void setTypingTo(String typingTo) {
+        this.typingTo = typingTo;
     }
 }

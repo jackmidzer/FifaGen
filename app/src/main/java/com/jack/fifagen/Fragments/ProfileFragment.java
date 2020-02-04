@@ -1,4 +1,4 @@
-package com.jack.fifagen;
+package com.jack.fifagen.Fragments;
 
 
 import android.Manifest;
@@ -44,6 +44,8 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.jack.fifagen.Activities.MainActivity;
+import com.jack.fifagen.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
@@ -136,7 +138,7 @@ public class ProfileFragment extends Fragment {
                     String avatar = "" + ds.child("avatar").getValue();
                     String cover = "" + ds.child("cover").getValue();
 
-                    //set data to the views
+                    //set data into the views
                     if (!name.isEmpty()) {
                         nameTv.setText(name);
                     }

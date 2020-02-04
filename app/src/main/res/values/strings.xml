@@ -39,4 +39,14 @@
     <string name="online">online</string>
     <string name="search">Search</string>
     <string name="typing">typing…</string>
+    <string name="save">Save</string>
+    <string name="away_score">Away Score</string>
+    <string name="away_player">Away Player</string>
+    <string name="home_score">Home Score</string>
+    <string name="home_player">Home Player</string>
+    <string name="away_team">Away Team</string>
+    <string name="home_team">Home Team</string>
+    <string name="generate_match">Generate Match</string>
+    <string name="save_match_result">Save Match Result</string>
+    <string name="login_here_to_save_matches_against_friends">Login here to save matches against friends!</string>
 </resources>

@@ -1,4 +1,4 @@
-package com.jack.fifagen;
+package com.jack.fifagen.Activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -34,6 +34,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.jack.fifagen.DashboardActivity;
+import com.jack.fifagen.R;
 
 import java.util.HashMap;
 
@@ -250,6 +252,7 @@ public class LoginActivity extends AppCompatActivity {
             } catch (ApiException e) {
                 // Google Sign In failed, update UI appropriately
                 Toast.makeText(LoginActivity.this, "LoginActivity <3>: "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                progressDialog.dismiss();
                 // ...
             }
         }
