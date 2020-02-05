@@ -6,10 +6,13 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SearchView;
+import androidx.core.view.MenuItemCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.service.autofill.Dataset;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -123,6 +126,47 @@ public class ChatListFragment extends Fragment {
         });
     }
 
+    private void searchChats(final String query) {
+        //get current user
+        final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users");
+
+        //get all data
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                userList.clear();
+                for (DataSnapshot ds: dataSnapshot.getChildren()) {
+                    ModelUser modelUser = ds.getValue(ModelUser.class);
+                    for (ModelChatlist chatlist: chatlistList) {
+                        if (modelUser.getUid() != null && modelUser.getUid().equals(chatlist.getId())) {
+                            if (modelUser.getName().toLowerCase().contains(query.toLowerCase())) {
+                                userList.add(modelUser);
+                            }
+                            break;
+                        }
+                    }
+
+                    //adapter
+                    adapterChatlist = new AdapterChatlist(getActivity(), userList);
+                    //refresh adapter
+                    adapterChatlist.notifyDataSetChanged();
+                    //set adapter to recycler view
+                    recyclerView.setAdapter(adapterChatlist);
+
+                    for (int i=0; i<userList.size(); i++) {
+                        lastMessage(userList.get(i).getUid());
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
     private void lastMessage(final String userId) {
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Chats");
         reference.addValueEventListener(new ValueEventListener() {
@@ -175,6 +219,35 @@ public class ChatListFragment extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         //inflating menu
         inflater.inflate(R.menu.menu_main, menu);
+
+        //search view
+        MenuItem item = menu.findItem(R.id.searchId);
+        SearchView searchView = (SearchView) MenuItemCompat.getActionView(item);
+
+        //search listener
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                //if search query not empty then search
+                if (!TextUtils.isEmpty(s.trim())) {
+                    searchChats(s);
+                }else {
+                    loadChats();
+                }
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                //if search query not empty then search
+                if (!TextUtils.isEmpty(s.trim())) {
+                    searchChats(s);
+                }else {
+                    loadChats();
+                }
+                return false;
+            }
+        });
 
         super.onCreateOptionsMenu(menu, inflater);
     }

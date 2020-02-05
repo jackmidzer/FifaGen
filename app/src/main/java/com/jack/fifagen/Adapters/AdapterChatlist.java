@@ -65,7 +65,7 @@ public class AdapterChatlist extends RecyclerView.Adapter<AdapterChatlist.MyHold
             Picasso.get().load(theirAvatar).placeholder(R.drawable.ic_default_img).into(myHolder.avatarIv);
         }
         catch (Exception e) {
-            Picasso.get().load(R.drawable.ic_default_img).into(myHolder.avatarIv);
+            //do nothing
         }
         //set online status pf users in chatlist
         if (userList.get(i).getOnlineStatus().equals("online")) {

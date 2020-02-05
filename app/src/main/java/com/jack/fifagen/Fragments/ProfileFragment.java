@@ -56,7 +56,6 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
@@ -95,8 +94,6 @@ public class ProfileFragment extends Fragment {
     private static final int IMAGE_PICK_GALLERY_CODE = 400;
     private String[] cameraPermissions;
     private String[] storagePermissions;
-
-    String uid;
 
     //uri of picked image
     private Uri image_uri;
@@ -219,7 +216,7 @@ public class ProfileFragment extends Fragment {
     private void getAllMatches() {
         //get current user
         final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Matches");
+        DatabaseReference reference = database.getReference("Matches");
 
         //get all data
         reference.addValueEventListener(new ValueEventListener() {
@@ -251,8 +248,8 @@ public class ProfileFragment extends Fragment {
 
     private void searchMatches(final String query) {
         //get current user
-        final String myUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users");
+        final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        DatabaseReference reference = database.getReference("Matches");
 
         //get all data
         reference.addValueEventListener(new ValueEventListener() {
@@ -263,8 +260,8 @@ public class ProfileFragment extends Fragment {
                     ModelMatch modelMatch = ds.getValue(ModelMatch.class);
 
                     //get all searched matches of currently signed in user
-                    if ((modelMatch != null && modelMatch.getHomeUid().equals(myUid) || modelMatch.getAwayUid().equals(myUid))) {
-                        if (modelMatch.getAwayPlayer().toLowerCase().contains(query.toLowerCase()) || modelMatch.getHomePlayer().toLowerCase().contains(query.toLowerCase()) || modelMatch.getHomeTeam().toLowerCase().contains(query.toLowerCase()) || modelMatch.getAwayTeam().toLowerCase().contains(query.toLowerCase()) || modelMatch.getHomeScore().toLowerCase().contains(query.toLowerCase()) || modelMatch.getAwayScore().toLowerCase().contains(query.toLowerCase())) {
+                    if (modelMatch != null && (modelMatch.getHomeUid().equals(user.getUid()) || modelMatch.getAwayUid().equals(user.getUid()))) {
+                        if (modelMatch.getAwayPlayer().toLowerCase().contains(query.toLowerCase()) || modelMatch.getHomePlayer().toLowerCase().contains(query.toLowerCase()) || modelMatch.getHomeTeam().toLowerCase().contains(query.toLowerCase()) || modelMatch.getAwayTeam().toLowerCase().contains(query.toLowerCase())) {
                             matchList.add(modelMatch);
                         }
                     }
@@ -571,8 +568,6 @@ public class ProfileFragment extends Fragment {
             //user not signed in, go to main activity
             startActivity(new Intent(getActivity(), MainActivity.class));
             getActivity().finish();
-        }else {
-            uid = user.getUid();
         }
     }
 
