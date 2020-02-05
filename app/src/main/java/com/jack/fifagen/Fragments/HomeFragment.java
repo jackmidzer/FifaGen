@@ -176,7 +176,6 @@ public class HomeFragment extends Fragment {
                     intent.putExtra("homeBadge", homeImage);
                     intent.putExtra("awayBadge", awayImage);
                     startActivity(intent);
-                    getActivity().finish();
                 }else {
                     Toast.makeText(getActivity(), "Generate a match first", Toast.LENGTH_SHORT).show();
                 }

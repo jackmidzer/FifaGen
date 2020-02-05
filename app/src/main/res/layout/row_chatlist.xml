@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardUseCompatPadding="true"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="2dp"
+    app:contentPadding="3dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.blogspot.atifsoftwares.circularimageview.CircularImageView
+            android:id="@+id/avatarId"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:src="@drawable/ic_default_img"/>
+
+        <ImageView
+            android:id="@+id/onlineStatusId"
+            android:layout_width="25dp"
+            android:layout_height="25dp"/>
+
+        <TextView
+            android:id="@+id/nameId"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:text="Their Name"
+            android:textColor="@android:color/black"
+            android:textSize="18sp"
+            android:layout_toEndOf="@+id/avatarId"
+            android:layout_toRightOf="@+id/avatarId"
+            android:layout_marginLeft="4dp" />
+
+        <TextView
+            android:id="@+id/messageId"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:text="The last message"
+            android:maxLines="2"
+            android:layout_toEndOf="@+id/avatarId"
+            android:layout_toRightOf="@+id/avatarId"
+            android:layout_below="@+id/nameId"
+            android:layout_marginLeft="4dp" />
+
+
+    </RelativeLayout>
+
+</androidx.cardview.widget.CardView>

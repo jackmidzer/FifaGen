@@ -2,12 +2,12 @@ package com.jack.fifagen.Models;
 
 public class ModelMatch {
 
-    private String homeTeam, awayTeam, homeBadge, awayBadge, homePlayer, awayPlayer, homeScore, awayScore, isApproved, timestamp;
+    private String homeTeam, awayTeam, homeBadge, awayBadge, homePlayer, awayPlayer, homeScore, awayScore, isApproved, timestamp, winner, homeUid, awayUid;
 
     public ModelMatch() {
     }
 
-    public ModelMatch(String homeTeam, String awayTeam, String homeBadge, String awayBadge, String homePlayer, String awayPlayer, String homeScore, String awayScore, String isApproved, String timestamp) {
+    public ModelMatch(String homeTeam, String awayTeam, String homeBadge, String awayBadge, String homePlayer, String awayPlayer, String homeScore, String awayScore, String isApproved, String timestamp, String winner, String homeUid, String awayUid) {
         this.homeTeam = homeTeam;
         this.awayTeam = awayTeam;
         this.homeBadge = homeBadge;
@@ -18,6 +18,9 @@ public class ModelMatch {
         this.awayScore = awayScore;
         this.isApproved = isApproved;
         this.timestamp = timestamp;
+        this.winner = winner;
+        this.homeUid = homeUid;
+        this.awayUid = awayUid;
     }
 
     public String getHomeTeam() {
@@ -98,5 +101,29 @@ public class ModelMatch {
 
     public void setTimestamp(String timestamp) {
         this.timestamp = timestamp;
+    }
+
+    public String getWinner() {
+        return winner;
+    }
+
+    public void setWinner(String winner) {
+        this.winner = winner;
+    }
+
+    public String getHomeUid() {
+        return homeUid;
+    }
+
+    public void setHomeUid(String homeUid) {
+        this.homeUid = homeUid;
+    }
+
+    public String getAwayUid() {
+        return awayUid;
+    }
+
+    public void setAwayUid(String awayUid) {
+        this.awayUid = awayUid;
     }
 }

@@ -37,6 +37,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
+import com.jack.fifagen.DashboardActivity;
 import com.jack.fifagen.Fragments.HomeFragment;
 import com.jack.fifagen.Models.ModelUser;
 import com.jack.fifagen.R;
@@ -113,7 +114,7 @@ public class SaveMatchActivity extends AppCompatActivity {
         swapBtn = findViewById(R.id.swapId);
 
         //get uid and team info
-        Intent intent = getIntent();
+        final Intent intent = getIntent();
         homeTeam = intent.getStringExtra("homeTeam");
         awayTeam = intent.getStringExtra("awayTeam");
         homeBadge = intent.getStringExtra("homeBadge");
@@ -185,14 +186,12 @@ public class SaveMatchActivity extends AppCompatActivity {
                 }else {
                     //scores are not empty
                     saveMatch(homeScore, awayScore);
+                    //go to home after saving match
+                    homeScoreEt.setText("");
+                    awayScoreEt.setText("");
+                    Intent intent1 = new Intent(SaveMatchActivity.this, DashboardActivity.class);
+                    startActivity(intent1);
                 }
-                //go to home after saving match
-                homeScoreEt.setText("");
-                awayScoreEt.setText("");
-                HomeFragment fragment = new HomeFragment();
-                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-                ft.replace(R.id.contentId, fragment, "");
-                ft.commit();
             }
         });
 
@@ -206,6 +205,9 @@ public class SaveMatchActivity extends AppCompatActivity {
         user = firebaseAuth.getCurrentUser();
 
         String timestamp = String.valueOf(System.currentTimeMillis());
+        String winner;
+        String homeUid;
+        String awayUid;
 
         //store chat info in database using hashmap
         HashMap<String, Object> hashMap = new HashMap<>();
@@ -213,19 +215,38 @@ public class SaveMatchActivity extends AppCompatActivity {
         hashMap.put("awayTeam", awayTeam);
         hashMap.put("homeBadge", homeBadge);
         hashMap.put("awayBadge", awayBadge);
+        Integer hScore = Integer.parseInt(homeScore);
+        Integer aScore = Integer.parseInt(awayScore);
         if (homePlayer.trim().equals(theirName.trim())) {
-            homePlayer = theirUid;
-            awayPlayer = myUid;
+            homeUid = theirUid;
+            awayUid = myUid;
+            if (hScore > aScore) {
+                winner  = theirUid;
+            }else if (aScore > hScore) {
+                winner = myUid;
+            }else {
+                winner = "none";
+            }
         }else {
-            homePlayer = myUid;
-            awayPlayer = theirUid;
+            homeUid = myUid;
+            awayUid = theirUid;
+            if (hScore > aScore) {
+                winner  = myUid;
+            }else if (aScore > hScore) {
+                winner = theirUid;
+            }else {
+                winner = "none";
+            }
         }
-        hashMap.put("homePlayer", homePlayer);
+        hashMap.put("homePlayer", "You");
         hashMap.put("awayPlayer", awayPlayer);
+        hashMap.put("homeUid", homeUid);
+        hashMap.put("awayUid", awayUid);
         hashMap.put("homeScore", homeScore);
         hashMap.put("awayScore", awayScore);
         hashMap.put("isApproved", "approved");
         hashMap.put("timestamp", timestamp);
+        hashMap.put("winner", winner);
         databaseReference.child("Matches").push().setValue(hashMap).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
@@ -246,18 +267,17 @@ public class SaveMatchActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 ModelUser user = dataSnapshot.getValue(ModelUser.class);
                 if (notify) {
-                    sendNotification(theirUid, user.getName(), "Recorded a match between you and them. Click to approve/reject");
+                    sendNotification(theirUid, user.getName(), "Created a new match. Accept/Reject?");
                 }
                 notify = false;
+                progressDialog.dismiss();
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                progressDialog.dismiss();
             }
         });
-
-        progressDialog.dismiss();
     }
 
     private void sendNotification(final String theirUid, final String name, final String message) {

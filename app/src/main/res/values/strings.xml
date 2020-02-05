@@ -49,4 +49,7 @@
     <string name="generate_match">Generate Match</string>
     <string name="save_match_result">Save Match Result</string>
     <string name="login_here_to_save_matches_against_friends">Login here to save matches against friends!</string>
+    <string name="date">Date</string>
+    <string name="x">X</string>
+    <string name="score">-</string>
 </resources>

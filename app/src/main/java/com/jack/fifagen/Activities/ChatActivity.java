@@ -305,6 +305,35 @@ public class ChatActivity extends AppCompatActivity {
         });
 
         //create chatlist node/child in firebase database
+        final DatabaseReference chatReference1 = FirebaseDatabase.getInstance().getReference("Chatlist").child(myUid).child(theirUid);
+        chatReference1.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (!dataSnapshot.exists()) {
+                    chatReference1.child("id").setValue(theirUid);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        final DatabaseReference chatReference2 = FirebaseDatabase.getInstance().getReference("Chatlist").child(theirUid).child(myUid);
+        chatReference2.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (!dataSnapshot.exists()) {
+                    chatReference2.child("id").setValue(myUid);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     private void sendNotification(final String theirUid, final String name, final String message) {
