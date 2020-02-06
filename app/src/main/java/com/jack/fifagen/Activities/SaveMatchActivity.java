@@ -208,6 +208,8 @@ public class SaveMatchActivity extends AppCompatActivity {
         String winner;
         String homeUid;
         String awayUid;
+        homePlayer = homePlayerTv.getText().toString();
+        awayPlayer = awayPlayerTv.getText().toString();
 
         //store chat info in database using hashmap
         HashMap<String, Object> hashMap = new HashMap<>();
