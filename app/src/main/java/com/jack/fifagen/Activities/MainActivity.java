@@ -1,4 +1,4 @@
-package com.jack.fifagen;
+package com.jack.fifagen.Activities;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,6 +12,10 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.jack.fifagen.DatabaseAccess;
+import com.jack.fifagen.Models.ModelTeam;
+import com.jack.fifagen.R;
+
 public class MainActivity extends AppCompatActivity {
     //22videos - 8 hours 32 minutes 05 seconds
 
@@ -21,8 +25,8 @@ public class MainActivity extends AppCompatActivity {
     public ImageView homeBadge, homeFlag, homeLogo;
     public ImageView awayBadge, awayFlag, awayLogo;
     public RatingBar homeStars, awayStars;
-    public Button generate, register, login;
-    public TextView settings;
+    public Button generate;
+    public TextView settings, login;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +60,6 @@ public class MainActivity extends AppCompatActivity {
         awayFlag = findViewById(R.id.awayFlag);
         homeLogo = findViewById(R.id.homeLogo);
         awayLogo = findViewById(R.id.awayLogo);
-        register = findViewById(R.id.register);
         login = findViewById(R.id.login);
 
         generate.setOnClickListener(new View.OnClickListener() {
@@ -66,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
                 databaseAccess.open();
 
                 //Home team
-                Team home_team = databaseAccess.getRandomTeam();
+                ModelTeam home_team = databaseAccess.getRandomTeam();
                 if (home_team != null) {
                     Log.d("myTag5", "result is " + home_team);
                     homeTeam.setText(home_team.getName());
@@ -88,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 //Away team
-                Team away_team = databaseAccess.getRandomTeam();
+                ModelTeam away_team = databaseAccess.getRandomTeam();
                 while (away_team == home_team) {
                     away_team = databaseAccess.getRandomTeam();
                 }
@@ -113,15 +116,6 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 databaseAccess.close();
-            }
-        });
-
-        //handle register button click
-        register.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, RegisterActivity.class);
-                startActivity(intent);
             }
         });
 

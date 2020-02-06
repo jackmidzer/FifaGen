@@ -3,10 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background_15"
-    tools:context=".ProfileFragment">
+    android:background="@drawable/background_18"
+    tools:context=".Fragments.ProfileFragment">
 
     <ScrollView
+        android:id="@+id/scrollViewId"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
 
@@ -29,7 +30,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="120dp"
                 android:orientation="horizontal"
-                android:layout_marginTop="105dp">
+                android:layout_marginTop="100dp">
 
                 <ImageView
                     android:id="@+id/avatarId"
@@ -83,6 +84,13 @@
 
             </LinearLayout>
 
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/matches_recyclerViewId"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/linearLayoutId"/>
+
+
         </RelativeLayout>
 
     </ScrollView>
@@ -94,9 +102,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginBottom="65dp"
         android:layout_alignParentRight="true"
-        android:layout_marginEnd="10dp"
-        android:layout_marginRight="10dp" />
+        android:layout_margin="10dp"/>
 
 </RelativeLayout>

@@ -1,4 +1,4 @@
-package com.jack.fifagen;
+package com.jack.fifagen.Fragments;
 
 
 import android.Manifest;
@@ -13,8 +13,12 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SearchView;
 import androidx.core.content.ContextCompat;
+import androidx.core.view.MenuItemCompat;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.provider.MediaStore;
 import android.text.TextUtils;
@@ -44,9 +48,16 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.jack.fifagen.Activities.MainActivity;
+import com.jack.fifagen.Adapters.AdapterMatch;
+import com.jack.fifagen.Models.ModelMatch;
+import com.jack.fifagen.R;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
 import static com.google.firebase.storage.FirebaseStorage.getInstance;
@@ -64,12 +75,13 @@ public class ProfileFragment extends Fragment {
     private DatabaseReference databaseReference;
     private StorageReference storageReference;
 
+    private RecyclerView recyclerView;
+    private AdapterMatch adapterMatch;
+    private List<ModelMatch> matchList;
+
     //views
-    private ImageView avatarIv;
-    private ImageView coverIv;
-    private TextView nameTv;
-    private TextView emailTv;
-    private TextView phoneTv;
+    private ImageView avatarIv, coverIv;
+    private TextView nameTv, emailTv, phoneTv;
     private FloatingActionButton editFab;
 
     //progress dialog
@@ -82,8 +94,6 @@ public class ProfileFragment extends Fragment {
     private static final int IMAGE_PICK_GALLERY_CODE = 400;
     private String[] cameraPermissions;
     private String[] storagePermissions;
-
-    String uid;
 
     //uri of picked image
     private Uri image_uri;
@@ -119,6 +129,15 @@ public class ProfileFragment extends Fragment {
         phoneTv = view.findViewById(R.id.phoneId);
         editFab = view.findViewById(R.id.editId);
 
+        //init recycler view
+        recyclerView = view.findViewById(R.id.matches_recyclerViewId);
+        //set its properties
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        layoutManager.setStackFromEnd(true);
+        layoutManager.setReverseLayout(true);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(layoutManager);
+
         //init progress dialog
         progressDialog = new ProgressDialog(getActivity());
 
@@ -136,7 +155,7 @@ public class ProfileFragment extends Fragment {
                     String avatar = "" + ds.child("avatar").getValue();
                     String cover = "" + ds.child("cover").getValue();
 
-                    //set data to the views
+                    //set data into the views
                     if (!name.isEmpty()) {
                         nameTv.setText(name);
                     }
@@ -180,10 +199,87 @@ public class ProfileFragment extends Fragment {
 
         checkUserStatus();
 
-        //load stats
-        //loadMyStats();
+        //init recycler view
+        recyclerView = view.findViewById(R.id.matches_recyclerViewId);
+        //set its properties
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        //init match list
+        matchList = new ArrayList<>();
+        //get all users
+        getAllMatches();
 
         return view;
+    }
+
+    private void getAllMatches() {
+        //get current user
+        final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        DatabaseReference reference = database.getReference("Matches");
+
+        //get all data
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                matchList.clear();
+                for (DataSnapshot ds: dataSnapshot.getChildren()) {
+                    ModelMatch modelMatch = ds.getValue(ModelMatch.class);
+
+                    //get all matches for currently signed in user
+                    if (modelMatch.getHomeUid().equals(user.getUid()) || modelMatch.getAwayUid().equals(user.getUid())) {
+                        matchList.add(modelMatch);
+                    }
+                    Collections.reverse(matchList);
+
+                    //adapter
+                    adapterMatch = new AdapterMatch(getActivity(), matchList);
+                    adapterMatch.notifyDataSetChanged();
+                    recyclerView.setAdapter(adapterMatch);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void searchMatches(final String query) {
+        //get current user
+        final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        DatabaseReference reference = database.getReference("Matches");
+
+        //get all data
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                matchList.clear();
+                for (DataSnapshot ds: dataSnapshot.getChildren()) {
+                    ModelMatch modelMatch = ds.getValue(ModelMatch.class);
+
+                    //get all searched matches of currently signed in user
+                    if (modelMatch != null && (modelMatch.getHomeUid().equals(user.getUid()) || modelMatch.getAwayUid().equals(user.getUid()))) {
+                        if (modelMatch.getAwayPlayer().toLowerCase().contains(query.toLowerCase()) || modelMatch.getHomePlayer().toLowerCase().contains(query.toLowerCase()) || modelMatch.getHomeTeam().toLowerCase().contains(query.toLowerCase()) || modelMatch.getAwayTeam().toLowerCase().contains(query.toLowerCase())) {
+                            matchList.add(modelMatch);
+                        }
+                    }
+
+                    //adapter
+                    adapterMatch = new AdapterMatch(getActivity(), matchList);
+                    //refresh adapter
+                    adapterMatch.notifyDataSetChanged();
+                    //set adapter to recycler view
+                    recyclerView.setAdapter(adapterMatch);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     private boolean checkStoragePermission() {
@@ -472,8 +568,6 @@ public class ProfileFragment extends Fragment {
             //user not signed in, go to main activity
             startActivity(new Intent(getActivity(), MainActivity.class));
             getActivity().finish();
-        }else {
-            uid = user.getUid();
         }
     }
 
@@ -488,6 +582,35 @@ public class ProfileFragment extends Fragment {
     public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater inflater) {
         //inflating menu
         inflater.inflate(R.menu.menu_main, menu);
+
+        //search view
+        MenuItem item = menu.findItem(R.id.searchId);
+        SearchView searchView = (SearchView) MenuItemCompat.getActionView(item);
+
+        //search listener
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                //if search query not empty then search
+                if (!TextUtils.isEmpty(s.trim())) {
+                    searchMatches(s);
+                }else {
+                    getAllMatches();
+                }
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                //if search query not empty then search
+                if (!TextUtils.isEmpty(s.trim())) {
+                    searchMatches(s);
+                }else {
+                    getAllMatches();
+                }
+                return false;
+            }
+        });
         super.onCreateOptionsMenu(menu, inflater);
     }
 

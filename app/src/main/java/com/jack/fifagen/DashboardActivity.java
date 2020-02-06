@@ -16,6 +16,11 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.jack.fifagen.Activities.MainActivity;
+import com.jack.fifagen.Fragments.ChatListFragment;
+import com.jack.fifagen.Fragments.HomeFragment;
+import com.jack.fifagen.Fragments.ProfileFragment;
+import com.jack.fifagen.Fragments.UsersFragment;
 import com.jack.fifagen.notifications.Token;
 
 public class DashboardActivity extends AppCompatActivity {
@@ -55,8 +60,6 @@ public class DashboardActivity extends AppCompatActivity {
 
         checkUserStatus();
 
-        //update the token
-        updateToken(FirebaseInstanceId.getInstance().getToken());
     }
 
     @Override
@@ -129,6 +132,9 @@ public class DashboardActivity extends AppCompatActivity {
             SharedPreferences.Editor editor = sp.edit();
             editor.putString("Current_USERID", mUid);
             editor.apply();
+
+            //update the token
+            updateToken(FirebaseInstanceId.getInstance().getToken());
         }
     }
 

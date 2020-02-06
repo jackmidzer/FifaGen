@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Fifa Gen</string>
     <string name="generate">Generate</string>
-    <string name="change_settings">Change Settings</string>
+    <string name="change_settings"><u>Change Settings</u></string>
     <string name="country">Country</string>
     <string name="home">Home</string>
     <string name="def">DEF</string>
@@ -15,10 +15,10 @@
     <string name="register">Register</string>
     <string name="password">Password</string>
     <string name="email">Email</string>
-    <string name="already_have_an_account_login">Already have an account? Login</string>
-    <string name="don_t_have_an_account_register">Don\'t have an account? Register</string>
+    <string name="already_have_an_account_login"><u>Already have an account? Login</u></string>
+    <string name="don_t_have_an_account_register"><u>Don\'t have an account? Register</u></string>
     <string name="profile">Profile</string>
-    <string name="forgot_password_recover_here">Forgot Password? Recover here</string>
+    <string name="forgot_password_recover_here"><u>Forgot Password? Recover here</u></string>
     <string name="users">Users</string>
     <string name="name">Name</string>
     <string name="phone">Phone</string>
@@ -39,4 +39,18 @@
     <string name="online">online</string>
     <string name="search">Search</string>
     <string name="typing">typing…</string>
+    <string name="save">Save</string>
+    <string name="away_score">Away Score</string>
+    <string name="away_player">Away Player</string>
+    <string name="home_score">Home Score</string>
+    <string name="home_player">Home Player</string>
+    <string name="away_team">Away Team</string>
+    <string name="home_team">Home Team</string>
+    <string name="generate_match">Generate Match</string>
+    <string name="save_match_result">Save Match Result</string>
+    <string name="login_here_to_save_matches_against_friends"><u>Login here to save matches against friends!</u></string>
+    <string name="date">Date</string>
+    <string name="x">X</string>
+    <string name="score">-</string>
+    <string name="save_match">Save Match</string>
 </resources>

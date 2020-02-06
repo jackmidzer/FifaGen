@@ -13,10 +13,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.jack.fifagen.ChatActivity;
+import com.jack.fifagen.Activities.ChatActivity;
 import com.jack.fifagen.Models.ModelUser;
 import com.jack.fifagen.R;
-import com.jack.fifagen.TheirProfileActivity;
+import com.jack.fifagen.Activities.TheirProfileActivity;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;

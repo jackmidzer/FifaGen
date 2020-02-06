@@ -6,7 +6,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-class DatabaseAccess {
+import com.jack.fifagen.Models.ModelTeam;
+
+public class DatabaseAccess {
     private SQLiteOpenHelper openHelper;
     private SQLiteDatabase db;
     private static DatabaseAccess instance;
@@ -16,7 +18,7 @@ class DatabaseAccess {
     }
 
     //return instance of database
-    static DatabaseAccess getInstance(Context context) {
+    public static DatabaseAccess getInstance(Context context) {
         if(instance == null) {
             instance = new DatabaseAccess(context);
         }
@@ -24,20 +26,20 @@ class DatabaseAccess {
     }
 
     //open database
-    void open() {
+    public void open() {
         this.db = openHelper.getWritableDatabase();
     }
 
     //close database
-    void close() {
+    public void close() {
         if (db != null) {
             this.db.close();
         }
     }
 
     //query database
-    Team getRandomTeam() {
-        Team team = null;
+    public ModelTeam getRandomTeam() {
+        ModelTeam team = null;
         Cursor c = db.rawQuery("SELECT team_name, team_id, league, league_id, country, country_id, defence, midfield, attack, overall, rating FROM teams WHERE rating > 3.5 ORDER BY RANDOM() LIMIT 1", null);
         if (c.getCount() == 0) {
             Log.d("myTag", "NO DATA");
@@ -56,7 +58,7 @@ class DatabaseAccess {
                 int att = c.getInt(8);
                 int overall = c.getInt(9);
                 Float rating = c.getFloat(10);
-                team = new Team(name, badge, league, logo, country, flag, def, mid, att, overall, rating);
+                team = new ModelTeam(name, badge, league, logo, country, flag, def, mid, att, overall, rating);
             }
         }
         c.close();
