@@ -227,7 +227,7 @@ public class ProfileFragment extends Fragment {
                     ModelMatch modelMatch = ds.getValue(ModelMatch.class);
 
                     //get all matches for currently signed in user
-                    if (modelMatch.getHomeUid().equals(user.getUid()) || modelMatch.getAwayUid().equals(user.getUid())) {
+                    if ((modelMatch.getHomeUid().equals(user.getUid()) || modelMatch.getAwayUid().equals(user.getUid())) && modelMatch.getIsApproved().equals("approved")) {
                         matchList.add(modelMatch);
                     }
                     Collections.reverse(matchList);

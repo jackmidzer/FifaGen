@@ -240,18 +240,21 @@ public class SaveMatchActivity extends AppCompatActivity {
                 winner = "none";
             }
         }
+        final String matchId = ""+homeUid+awayUid+timestamp;
+        hashMap.put("matchId", matchId);
         hashMap.put("homePlayer", "You");
         hashMap.put("awayPlayer", awayPlayer);
         hashMap.put("homeUid", homeUid);
         hashMap.put("awayUid", awayUid);
         hashMap.put("homeScore", homeScore);
         hashMap.put("awayScore", awayScore);
-        hashMap.put("isApproved", "approved");
+        hashMap.put("isApproved", "pending");
         hashMap.put("timestamp", timestamp);
         hashMap.put("winner", winner);
         databaseReference.child("Matches").push().setValue(hashMap).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
+                addToTheirNotifications(theirUid, matchId, "Created a match. Accept/Reject?");
                 progressDialog.dismiss();
                 Toast.makeText(SaveMatchActivity.this, "Saved", Toast.LENGTH_SHORT).show();
             }
@@ -278,6 +281,31 @@ public class SaveMatchActivity extends AppCompatActivity {
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 progressDialog.dismiss();
+            }
+        });
+    }
+
+    private void addToTheirNotifications(String theirUid, String matchId, String message) {
+        String timestamp = ""+ System.currentTimeMillis();
+        String myUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        HashMap<Object, String> hashMap = new HashMap<>();
+        hashMap.put("matchId", matchId);
+        hashMap.put("timestamp", timestamp);
+        hashMap.put("theirUid", theirUid);
+        hashMap.put("message", message);
+        hashMap.put("senderUid", myUid);
+
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Users");
+        databaseReference.child(theirUid).child("Notifications").child(timestamp).setValue(hashMap).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                //added successfully
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                //failed
             }
         });
     }
