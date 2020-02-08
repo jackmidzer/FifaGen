@@ -41,8 +41,8 @@ public class AdapterMatch extends RecyclerView.Adapter<AdapterMatch.MyHolder>{
 
     private Context context;
     private List<ModelMatch> matchList;
-
-    private String matchId, approved;
+    String myUid;
+    String newTimestamp;
 
     //constructor
     public AdapterMatch(Context context, List<ModelMatch> matchList) {
@@ -63,7 +63,7 @@ public class AdapterMatch extends RecyclerView.Adapter<AdapterMatch.MyHolder>{
         //firebase
         auth = FirebaseAuth.getInstance();
         firebaseDatabase = FirebaseDatabase.getInstance();
-        String myUid = auth.getCurrentUser().getUid();
+        myUid = auth.getCurrentUser().getUid();
 
         //get data
         String homeTeam = matchList.get(i).getHomeTeam();
@@ -76,8 +76,9 @@ public class AdapterMatch extends RecyclerView.Adapter<AdapterMatch.MyHolder>{
         String awayBadge = matchList.get(i).getAwayBadge();
         String timestamp = matchList.get(i).getTimestamp();
         String winner = matchList.get(i).getWinner();
-        approved = matchList.get(i).getIsApproved();
-        matchId = matchList.get(i).getMatchId();
+        final String createdBy = matchList.get(i).getCreatedBy();
+        final String approved = matchList.get(i).getIsApproved();
+        final String matchId = matchList.get(i).getMatchId();
 
         //convert timestamp to dd/mm/yy hh:mm am/pm
         Calendar calendar = Calendar.getInstance(Locale.ENGLISH);
@@ -113,23 +114,28 @@ public class AdapterMatch extends RecyclerView.Adapter<AdapterMatch.MyHolder>{
             @Override
             public void onClick(View v) {
                 if (approved.equals("pending")) {
-                    //show accept reject dialog
+                    //show accept/delete dialog
                     AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                    builder.setTitle("Approve Match");
-                    builder.setMessage("Do you wish to approve this match");
-                    builder.setPositiveButton("Approve", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            //delete notification and approve match
-                            respondToMatch(true);
-                            dialog.dismiss();
-                        }
-                    });
+                    if (!createdBy.equals(myUid)) {
+                        builder.setTitle("Approve Match");
+                        builder.setMessage("Do you wish to approve this match");
+                        builder.setPositiveButton("Approve", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                //delete notification and approve match
+                                respondToMatch(true, matchId);
+                                dialog.dismiss();
+                            }
+                        });
+                    }else {
+                        builder.setTitle("Delete Match");
+                        builder.setMessage("Do you wish to delete this match");
+                    }
                     builder.setNegativeButton("Delete", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             //delete notification and delete match
-                            respondToMatch(false);
+                            respondToMatch(false, matchId);
                             dialog.dismiss();
                         }
                     });
@@ -139,13 +145,13 @@ public class AdapterMatch extends RecyclerView.Adapter<AdapterMatch.MyHolder>{
         });
     }
 
-    private void respondToMatch(final boolean approve) {
+    private void respondToMatch(final boolean approve, final String matchId) {
         //get current user
         final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         final DatabaseReference reference = firebaseDatabase.getReference("Matches");
 
         //get all data
-        reference.addValueEventListener(new ValueEventListener() {
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot ds: dataSnapshot.getChildren()) {
@@ -156,8 +162,8 @@ public class AdapterMatch extends RecyclerView.Adapter<AdapterMatch.MyHolder>{
 
                         if (approve) {
                             //approve match
-                            HashMap<String, String> hashMap = new HashMap<>();
-                            hashMap.put("isApproved", "approved");
+                            newTimestamp = String.valueOf(System.currentTimeMillis());
+                            reference.child(ds.getKey()).child("timestamp").setValue(newTimestamp);
                             reference.child(ds.getKey()).child("isApproved").setValue("approved").addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {
@@ -169,6 +175,7 @@ public class AdapterMatch extends RecyclerView.Adapter<AdapterMatch.MyHolder>{
                                     Toast.makeText(context, "AdapterNotification <1>: "+e.getMessage(), Toast.LENGTH_SHORT).show();
                                 }
                             });
+                            break;
                         }else {
                             //reject match and delete
                             ds.getRef().removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -182,6 +189,7 @@ public class AdapterMatch extends RecyclerView.Adapter<AdapterMatch.MyHolder>{
                                     Toast.makeText(context, "AdapterNotification <2>: "+e.getMessage(), Toast.LENGTH_SHORT).show();
                                 }
                             });
+                            break;
                         }
                     }
                 }

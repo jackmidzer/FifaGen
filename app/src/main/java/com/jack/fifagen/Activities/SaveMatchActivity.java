@@ -242,7 +242,8 @@ public class SaveMatchActivity extends AppCompatActivity {
         }
         final String matchId = ""+homeUid+awayUid+timestamp;
         hashMap.put("matchId", matchId);
-        hashMap.put("homePlayer", "You");
+        hashMap.put("createdBy", myUid);
+        hashMap.put("homePlayer", homePlayer);
         hashMap.put("awayPlayer", awayPlayer);
         hashMap.put("homeUid", homeUid);
         hashMap.put("awayUid", awayUid);

@@ -32,9 +32,6 @@ import com.jack.fifagen.Activities.OpponentsActivity;
 import com.jack.fifagen.R;
 
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class HomeFragment extends Fragment {
 
     //firebase

@@ -14,6 +14,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
+import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.MenuItemCompat;
 import androidx.fragment.app.Fragment;
@@ -65,9 +66,6 @@ import static android.app.Activity.RESULT_OK;
 import static com.google.firebase.storage.FirebaseStorage.getInstance;
 
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class ProfileFragment extends Fragment {
 
     //firebase
@@ -83,9 +81,10 @@ public class ProfileFragment extends Fragment {
 
     //views
     private ImageView avatarIv, coverIv;
-    private TextView nameTv, emailTv, phoneTv;
+    private TextView nameTv, emailTv, phoneTv, noResultsTv;
     private FloatingActionButton editFab;
     private RadioGroup tabBtns;
+    private CardView cardViewLayout;
 
     public String matchStatus = "approved";
 
@@ -134,6 +133,8 @@ public class ProfileFragment extends Fragment {
         phoneTv = view.findViewById(R.id.phoneId);
         editFab = view.findViewById(R.id.editId);
         tabBtns = view.findViewById(R.id.tabLayoutId);
+        noResultsTv = view.findViewById(R.id.noResultsId);
+        cardViewLayout = (CardView) view.findViewById(R.id.cardViewId);
 
         //init recycler view
         recyclerView = view.findViewById(R.id.matches_recyclerViewId);
@@ -205,12 +206,6 @@ public class ProfileFragment extends Fragment {
 
         checkUserStatus();
 
-        //init recycler view
-        recyclerView = view.findViewById(R.id.matches_recyclerViewId);
-        //set its properties
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-
         //init match list
         matchList = new ArrayList<>();
         //get all users
@@ -228,14 +223,20 @@ public class ProfileFragment extends Fragment {
                 switch (index) {
                     case 0:
                         //approved
+                        noResultsTv.setText("No Matches Played");
+                        cardViewLayout.setVisibility(View.GONE);
                         matchStatus = "approved";
                         getAllMatches(matchStatus);
                         break;
                     case 1:
                         //stats
+                        noResultsTv.setText("No Stats Recorded");
+                        cardViewLayout.setVisibility(View.GONE);
                         break;
                     case 2:
                         //pending
+                        noResultsTv.setText("No Pending Matches");
+                        cardViewLayout.setVisibility(View.GONE);
                         matchStatus = "pending";
                         getAllMatches(matchStatus);
                         break;
@@ -249,10 +250,10 @@ public class ProfileFragment extends Fragment {
     private void getAllMatches(final String status) {
         //get current user
         final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        DatabaseReference reference = database.getReference("Matches");
+        Query query = database.getReference("Matches").orderByChild("timestamp");
 
         //get all data
-        reference.addValueEventListener(new ValueEventListener() {
+        query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 matchList.clear();
@@ -263,12 +264,14 @@ public class ProfileFragment extends Fragment {
                     if ((modelMatch.getHomeUid().equals(user.getUid()) || modelMatch.getAwayUid().equals(user.getUid())) && modelMatch.getIsApproved().equals(status)) {
                         matchList.add(modelMatch);
                     }
-                    Collections.reverse(matchList);
 
                     //adapter
                     adapterMatch = new AdapterMatch(getActivity(), matchList);
                     adapterMatch.notifyDataSetChanged();
                     recyclerView.setAdapter(adapterMatch);
+                }
+                if (adapterMatch.getItemCount() == 0){
+                    cardViewLayout.setVisibility(View.VISIBLE);
                 }
             }
 

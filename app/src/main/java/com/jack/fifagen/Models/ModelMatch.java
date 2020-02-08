@@ -2,13 +2,14 @@ package com.jack.fifagen.Models;
 
 public class ModelMatch {
 
-    private String matchId, homeTeam, awayTeam, homeBadge, awayBadge, homePlayer, awayPlayer, homeScore, awayScore, isApproved, timestamp, winner, homeUid, awayUid;
+    private String matchId,createdBy, homeTeam, awayTeam, homeBadge, awayBadge, homePlayer, awayPlayer, homeScore, awayScore, isApproved, timestamp, winner, homeUid, awayUid;
 
     public ModelMatch() {
     }
 
-    public ModelMatch(String matchId, String homeTeam, String awayTeam, String homeBadge, String awayBadge, String homePlayer, String awayPlayer, String homeScore, String awayScore, String isApproved, String timestamp, String winner, String homeUid, String awayUid) {
+    public ModelMatch(String matchId, String createdBy, String homeTeam, String awayTeam, String homeBadge, String awayBadge, String homePlayer, String awayPlayer, String homeScore, String awayScore, String isApproved, String timestamp, String winner, String homeUid, String awayUid) {
         this.matchId = matchId;
+        this.createdBy = createdBy;
         this.homeTeam = homeTeam;
         this.awayTeam = awayTeam;
         this.homeBadge = homeBadge;
@@ -30,6 +31,14 @@ public class ModelMatch {
 
     public void setMatchId(String matchId) {
         this.matchId = matchId;
+    }
+
+    public String getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
     }
 
     public String getHomeTeam() {
