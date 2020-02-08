@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/background_18"
     tools:context=".Fragments.ProfileFragment">
 
@@ -84,12 +85,82 @@
 
             </LinearLayout>
 
+            <RadioGroup
+                android:id="@+id/tabLayoutId"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:layout_below="@id/linearLayoutId"
+                android:gravity="center"
+                android:orientation="horizontal" >
+
+                <RadioButton
+                    android:id="@+id/approvedId"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/tab_selector"
+                    android:text="Matches"
+                    android:textSize="18sp"
+                    android:button="@null"
+                    android:checked="true"
+                    android:gravity="center" />
+
+                <RadioButton
+                    android:id="@+id/statsId"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/tab_selector"
+                    android:text="Stats"
+                    android:textSize="18sp"
+                    android:button="@null"
+                    android:gravity="center" />
+
+                <RadioButton
+                    android:id="@+id/pendingId"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/tab_selector"
+                    android:text="Pending"
+                    android:textSize="18sp"
+                    android:button="@null"
+                    android:gravity="center" />
+
+
+            </RadioGroup>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardViewId"
+                android:layout_width="wrap_content"
+                android:layout_height="120dp"
+                android:layout_below="@+id/tabLayoutId"
+                android:visibility="gone"
+                app:cardUseCompatPadding="true"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="2dp"
+                app:cardBackgroundColor="@android:color/white"
+                app:contentPadding="3dp">
+
+                <TextView
+                    android:id="@+id/noResultsId"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="No Matches Played"
+                    android:textSize="24sp"
+                    android:textColor="@android:color/black"
+                    android:background="@drawable/background_10"/>
+
+
+            </androidx.cardview.widget.CardView>
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/matches_recyclerViewId"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_below="@+id/linearLayoutId"/>
-
+                android:layout_below="@+id/tabLayoutId"/>
 
         </RelativeLayout>
 

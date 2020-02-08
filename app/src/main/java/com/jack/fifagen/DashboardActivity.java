@@ -19,6 +19,7 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.jack.fifagen.Activities.MainActivity;
 import com.jack.fifagen.Fragments.ChatListFragment;
 import com.jack.fifagen.Fragments.HomeFragment;
+import com.jack.fifagen.Fragments.NotificationsFragment;
 import com.jack.fifagen.Fragments.ProfileFragment;
 import com.jack.fifagen.Fragments.UsersFragment;
 import com.jack.fifagen.notifications.Token;
@@ -29,6 +30,7 @@ public class DashboardActivity extends AppCompatActivity {
     public FirebaseAuth firebaseAuth;
 
     public ActionBar actionBar;
+    public BottomNavigationView navigationView;
 
     String mUid;
 
@@ -48,7 +50,7 @@ public class DashboardActivity extends AppCompatActivity {
         //titleTv = findViewById(R.id.titleId);
 
         //bottom navigation
-        BottomNavigationView navigationView = findViewById(R.id.navigationId);
+        navigationView = findViewById(R.id.navigationId);
         navigationView.setOnNavigationItemSelectedListener(selectedListener);
 
         //home fragment transaction (the default on start)
@@ -110,6 +112,14 @@ public class DashboardActivity extends AppCompatActivity {
                     FragmentTransaction ft4 = getSupportFragmentManager().beginTransaction();
                     ft4.replace(R.id.contentId, fragment4, "");
                     ft4.commit();
+                    return true;
+                case R.id.notificationsId:
+                    //users fragment transaction
+                    actionBar.setTitle("Notifications");
+                    NotificationsFragment fragment5 = new NotificationsFragment();
+                    FragmentTransaction ft5 = getSupportFragmentManager().beginTransaction();
+                    ft5.replace(R.id.contentId, fragment5, "");
+                    ft5.commit();
                     return true;
             }
 

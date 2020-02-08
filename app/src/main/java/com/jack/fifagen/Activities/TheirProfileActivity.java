@@ -3,36 +3,61 @@ package com.jack.fifagen.Activities;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.StorageReference;
 import com.jack.fifagen.Activities.MainActivity;
+import com.jack.fifagen.Adapters.AdapterMatch;
+import com.jack.fifagen.Models.ModelMatch;
 import com.jack.fifagen.R;
 import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import static com.google.firebase.storage.FirebaseStorage.getInstance;
 
 public class TheirProfileActivity extends AppCompatActivity {
 
     //firebase
     private FirebaseAuth firebaseAuth;
+    private FirebaseUser user;
+    private FirebaseDatabase database;
+    private DatabaseReference databaseReference;
+    private StorageReference storageReference;
+
+    private RecyclerView recyclerView;
+    private AdapterMatch adapterMatch;
+    private List<ModelMatch> matchList;
 
     //views
     private ImageView avatarIv;
     private ImageView coverIv;
-    private TextView nameTv;
-    private TextView emailTv;
-    private TextView phoneTv;
+    private TextView nameTv, emailTv, phoneTv, noResultsTv;
+    private RadioGroup tabBtns;
+    private CardView cardViewLayout;
+
+    public String matchStatus = "approved";
 
     String theirUid;
 
@@ -48,6 +73,10 @@ public class TheirProfileActivity extends AppCompatActivity {
 
         //Init firebase
         firebaseAuth = FirebaseAuth.getInstance();
+        user = firebaseAuth.getCurrentUser();
+        database = FirebaseDatabase.getInstance();
+        databaseReference = database.getReference("Users");
+        storageReference = getInstance().getReference();
 
         //init views
         avatarIv = findViewById(R.id.avatarId);
@@ -55,6 +84,18 @@ public class TheirProfileActivity extends AppCompatActivity {
         nameTv = findViewById(R.id.nameId);
         emailTv = findViewById(R.id.emailId);
         phoneTv = findViewById(R.id.phoneId);
+        tabBtns = findViewById(R.id.tabLayoutId);
+        noResultsTv = findViewById(R.id.noResultsId);
+        cardViewLayout = findViewById(R.id.cardViewId);
+
+        //init recycler view
+        recyclerView = findViewById(R.id.matches_recyclerViewId);
+        //set its properties
+        LinearLayoutManager layoutManager = new LinearLayoutManager(TheirProfileActivity.this);
+        layoutManager.setStackFromEnd(true);
+        layoutManager.setReverseLayout(true);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(layoutManager);
 
         //get uid of clicked user
         Intent intent = getIntent();
@@ -109,7 +150,70 @@ public class TheirProfileActivity extends AppCompatActivity {
 
         checkUserStatus();
 
-        //load their stats
+        //init match list
+        matchList = new ArrayList<>();
+        //get all users
+        getAllMatches(matchStatus);
+
+        tabBtns.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
+        {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                View selectedTab = tabBtns.findViewById(checkedId);
+                int index = tabBtns.indexOfChild(selectedTab);
+
+                // Add logic here
+
+                switch (index) {
+                    case 0:
+                        //approved
+                        noResultsTv.setText("No Matches Played");
+                        cardViewLayout.setVisibility(View.GONE);
+                        matchStatus = "approved";
+                        getAllMatches(matchStatus);
+                        break;
+                    case 1:
+                        //stats
+                        noResultsTv.setText("No Stats Recorded");
+                        cardViewLayout.setVisibility(View.GONE);
+                        break;
+                }
+            }
+        });
+    }
+
+    private void getAllMatches(final String status) {
+        //get current user
+        DatabaseReference reference = database.getReference("Matches");
+
+        //get all data
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                matchList.clear();
+                for (DataSnapshot ds: dataSnapshot.getChildren()) {
+                    ModelMatch modelMatch = ds.getValue(ModelMatch.class);
+
+                    //get all approved or pending matches for currently signed in user
+                    if ((modelMatch.getHomeUid().equals(theirUid) || modelMatch.getAwayUid().equals(theirUid)) && modelMatch.getIsApproved().equals(status)) {
+                        matchList.add(modelMatch);
+                    }
+
+                    //adapter
+                    adapterMatch = new AdapterMatch(TheirProfileActivity.this, matchList);
+                    adapterMatch.notifyDataSetChanged();
+                    recyclerView.setAdapter(adapterMatch);
+                }
+                if (adapterMatch.getItemCount() == 0){
+                    cardViewLayout.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     private void checkUserStatus() {

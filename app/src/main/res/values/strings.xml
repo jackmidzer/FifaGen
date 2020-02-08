@@ -53,4 +53,5 @@
     <string name="x">X</string>
     <string name="score">-</string>
     <string name="save_match">Save Match</string>
+    <string name="notifications">Notifications</string>
 </resources>

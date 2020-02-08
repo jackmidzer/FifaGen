@@ -39,7 +39,7 @@
             <TextView
                 android:id="@+id/homeTeamId"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="20dp"
                 android:gravity="center"
                 android:textColor="@android:color/black"
                 android:text="@string/home_team"/>
@@ -47,7 +47,7 @@
             <TextView
                 android:id="@+id/homePlayerId"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="18dp"
                 android:gravity="center"
                 android:text="@string/home_player"/>
 
@@ -125,7 +125,7 @@
             <TextView
                 android:id="@+id/awayTeamId"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="20dp"
                 android:gravity="center"
                 android:textColor="@android:color/black"
                 android:text="@string/away_team"/>
@@ -133,7 +133,7 @@
             <TextView
                 android:id="@+id/awayPlayerId"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="18dp"
                 android:gravity="center"
                 android:text="@string/away_player"/>
 
