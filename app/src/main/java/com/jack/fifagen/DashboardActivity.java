@@ -30,6 +30,7 @@ public class DashboardActivity extends AppCompatActivity {
     public FirebaseAuth firebaseAuth;
 
     public ActionBar actionBar;
+    public BottomNavigationView navigationView;
 
     String mUid;
 
@@ -49,7 +50,7 @@ public class DashboardActivity extends AppCompatActivity {
         //titleTv = findViewById(R.id.titleId);
 
         //bottom navigation
-        BottomNavigationView navigationView = findViewById(R.id.navigationId);
+        navigationView = findViewById(R.id.navigationId);
         navigationView.setOnNavigationItemSelectedListener(selectedListener);
 
         //home fragment transaction (the default on start)

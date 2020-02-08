@@ -31,6 +31,8 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -83,6 +85,9 @@ public class ProfileFragment extends Fragment {
     private ImageView avatarIv, coverIv;
     private TextView nameTv, emailTv, phoneTv;
     private FloatingActionButton editFab;
+    private RadioGroup tabBtns;
+
+    public String matchStatus = "approved";
 
     //progress dialog
     private ProgressDialog progressDialog;
@@ -128,6 +133,7 @@ public class ProfileFragment extends Fragment {
         emailTv = view.findViewById(R.id.emailId);
         phoneTv = view.findViewById(R.id.phoneId);
         editFab = view.findViewById(R.id.editId);
+        tabBtns = view.findViewById(R.id.tabLayoutId);
 
         //init recycler view
         recyclerView = view.findViewById(R.id.matches_recyclerViewId);
@@ -208,12 +214,39 @@ public class ProfileFragment extends Fragment {
         //init match list
         matchList = new ArrayList<>();
         //get all users
-        getAllMatches();
+        getAllMatches(matchStatus);
+
+        tabBtns.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
+        {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                View selectedTab = tabBtns.findViewById(checkedId);
+                int index = tabBtns.indexOfChild(selectedTab);
+
+                // Add logic here
+
+                switch (index) {
+                    case 0:
+                        //approved
+                        matchStatus = "approved";
+                        getAllMatches(matchStatus);
+                        break;
+                    case 1:
+                        //stats
+                        break;
+                    case 2:
+                        //pending
+                        matchStatus = "pending";
+                        getAllMatches(matchStatus);
+                        break;
+                }
+            }
+        });
 
         return view;
     }
 
-    private void getAllMatches() {
+    private void getAllMatches(final String status) {
         //get current user
         final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         DatabaseReference reference = database.getReference("Matches");
@@ -226,8 +259,8 @@ public class ProfileFragment extends Fragment {
                 for (DataSnapshot ds: dataSnapshot.getChildren()) {
                     ModelMatch modelMatch = ds.getValue(ModelMatch.class);
 
-                    //get all matches for currently signed in user
-                    if ((modelMatch.getHomeUid().equals(user.getUid()) || modelMatch.getAwayUid().equals(user.getUid())) && modelMatch.getIsApproved().equals("approved")) {
+                    //get all approved or pending matches for currently signed in user
+                    if ((modelMatch.getHomeUid().equals(user.getUid()) || modelMatch.getAwayUid().equals(user.getUid())) && modelMatch.getIsApproved().equals(status)) {
                         matchList.add(modelMatch);
                     }
                     Collections.reverse(matchList);
@@ -246,41 +279,41 @@ public class ProfileFragment extends Fragment {
         });
     }
 
-    private void searchMatches(final String query) {
-        //get current user
-        final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        DatabaseReference reference = database.getReference("Matches");
-
-        //get all data
-        reference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                matchList.clear();
-                for (DataSnapshot ds: dataSnapshot.getChildren()) {
-                    ModelMatch modelMatch = ds.getValue(ModelMatch.class);
-
-                    //get all searched matches of currently signed in user
-                    if (modelMatch != null && (modelMatch.getHomeUid().equals(user.getUid()) || modelMatch.getAwayUid().equals(user.getUid()))) {
-                        if (modelMatch.getAwayPlayer().toLowerCase().contains(query.toLowerCase()) || modelMatch.getHomePlayer().toLowerCase().contains(query.toLowerCase()) || modelMatch.getHomeTeam().toLowerCase().contains(query.toLowerCase()) || modelMatch.getAwayTeam().toLowerCase().contains(query.toLowerCase())) {
-                            matchList.add(modelMatch);
-                        }
-                    }
-
-                    //adapter
-                    adapterMatch = new AdapterMatch(getActivity(), matchList);
-                    //refresh adapter
-                    adapterMatch.notifyDataSetChanged();
-                    //set adapter to recycler view
-                    recyclerView.setAdapter(adapterMatch);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-    }
+//    private void searchMatches(final String query) {
+//        //get current user
+//        final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+//        DatabaseReference reference = database.getReference("Matches");
+//
+//        //get all data
+//        reference.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                matchList.clear();
+//                for (DataSnapshot ds: dataSnapshot.getChildren()) {
+//                    ModelMatch modelMatch = ds.getValue(ModelMatch.class);
+//
+//                    //get all searched matches of currently signed in user
+//                    if (modelMatch != null && (modelMatch.getHomeUid().equals(user.getUid()) || modelMatch.getAwayUid().equals(user.getUid()))) {
+//                        if (modelMatch.getAwayPlayer().toLowerCase().contains(query.toLowerCase()) || modelMatch.getHomePlayer().toLowerCase().contains(query.toLowerCase()) || modelMatch.getHomeTeam().toLowerCase().contains(query.toLowerCase()) || modelMatch.getAwayTeam().toLowerCase().contains(query.toLowerCase())) {
+//                            matchList.add(modelMatch);
+//                        }
+//                    }
+//
+//                    //adapter
+//                    adapterMatch = new AdapterMatch(getActivity(), matchList);
+//                    //refresh adapter
+//                    adapterMatch.notifyDataSetChanged();
+//                    //set adapter to recycler view
+//                    recyclerView.setAdapter(adapterMatch);
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
+//    }
 
     private boolean checkStoragePermission() {
         //check if storage permission is enabled or not
@@ -582,35 +615,6 @@ public class ProfileFragment extends Fragment {
     public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater inflater) {
         //inflating menu
         inflater.inflate(R.menu.menu_main, menu);
-
-        //search view
-        MenuItem item = menu.findItem(R.id.searchId);
-        SearchView searchView = (SearchView) MenuItemCompat.getActionView(item);
-
-        //search listener
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String s) {
-                //if search query not empty then search
-                if (!TextUtils.isEmpty(s.trim())) {
-                    searchMatches(s);
-                }else {
-                    getAllMatches();
-                }
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String s) {
-                //if search query not empty then search
-                if (!TextUtils.isEmpty(s.trim())) {
-                    searchMatches(s);
-                }else {
-                    getAllMatches();
-                }
-                return false;
-            }
-        });
         super.onCreateOptionsMenu(menu, inflater);
     }
 

@@ -11,7 +11,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -23,6 +26,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.jack.fifagen.DashboardActivity;
+import com.jack.fifagen.Fragments.ProfileFragment;
 import com.jack.fifagen.Models.ModelMatch;
 import com.jack.fifagen.Models.ModelNotification;
 import com.jack.fifagen.R;
@@ -38,15 +43,20 @@ public class AdapterNotification extends RecyclerView.Adapter<AdapterNotificatio
 
     private Context context;
     private ArrayList<ModelNotification> notificationsList;
+    private FragmentManager manager;
+    private DashboardActivity dashboardActivity;
+    private ActionBar actionBar;
     private FirebaseAuth firebaseAuth;
     private FirebaseDatabase firebaseDatabase;
 
     private String timestamp;
     private String matchId;
 
-    public AdapterNotification(Context context, ArrayList<ModelNotification> notificationsList) {
+    public AdapterNotification(Context context, ArrayList<ModelNotification> notificationsList, FragmentManager manager, DashboardActivity dashboardActivity) {
         this.context = context;
         this.notificationsList = notificationsList;
+        this.manager = manager;
+        this.dashboardActivity = dashboardActivity;
         firebaseAuth = FirebaseAuth.getInstance();
     }
 
@@ -109,27 +119,30 @@ public class AdapterNotification extends RecyclerView.Adapter<AdapterNotificatio
             }
         });
 
-        //click notification to accept/reject match
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //show accept reject dialog
+                //show view pending dialog
                 AlertDialog.Builder builder = new AlertDialog.Builder(context);
                 builder.setTitle("Approve Match");
-                builder.setMessage("Do you wish to approve this match");
-                builder.setPositiveButton("Approve", new DialogInterface.OnClickListener() {
+                builder.setMessage("Do you wish to view your matches to approve this match?");
+                builder.setPositiveButton("View", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        //delete notification and approve match
-                        respondToMatch(true);
+                        //profile fragment transaction
+                        dashboardActivity.actionBar.setTitle("Profile");
+                        dashboardActivity.navigationView.setSelectedItemId(R.id.profileId);
+                        ProfileFragment fragment1 = new ProfileFragment();
+                        FragmentTransaction ft1 = manager.beginTransaction();
+                        ft1.replace(R.id.contentId, fragment1, "");
+                        ft1.commit();
                         dialog.dismiss();
                     }
                 });
-                builder.setNegativeButton("Reject", new DialogInterface.OnClickListener() {
+                builder.setNegativeButton("Delete notification", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        //delete notification and delete match
-                        respondToMatch(false);
+                        deleteNotification(timestamp);
                         dialog.dismiss();
                     }
                 });
@@ -140,63 +153,6 @@ public class AdapterNotification extends RecyclerView.Adapter<AdapterNotificatio
         //set to views
         holder.messageTv.setText(message);
         holder.timestampTv.setText(dateTime);
-    }
-
-    private void respondToMatch(final boolean isApproved) {
-        //get current user
-        final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        final DatabaseReference reference = firebaseDatabase.getReference("Matches");
-
-        //get all data
-        reference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot ds: dataSnapshot.getChildren()) {
-                    ModelMatch modelMatch = ds.getValue(ModelMatch.class);
-
-                    //get all matches for currently signed in user
-                    if ((modelMatch.getHomeUid().equals(user.getUid()) || modelMatch.getAwayUid().equals(user.getUid())) && modelMatch.getMatchId().equals(matchId)) {
-
-                        if (isApproved) {
-                            //approve match
-                            HashMap<String, String> hashMap = new HashMap<>();
-                            hashMap.put("isApproved", "approved");
-                            reference.child(ds.getKey()).child("isApproved").setValue("approved").addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void aVoid) {
-                                    Toast.makeText(context, "Match approved...", Toast.LENGTH_SHORT).show();
-                                    deleteNotification(timestamp);
-                                }
-                            }).addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    Toast.makeText(context, "AdapterNotification <1>: "+e.getMessage(), Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                        }else {
-                            //reject match and delete
-                            ds.getRef().removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void aVoid) {
-                                    Toast.makeText(context, "Match rejected...", Toast.LENGTH_SHORT).show();
-                                    deleteNotification(timestamp);
-                                }
-                            }).addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    Toast.makeText(context, "AdapterNotification <2>: "+e.getMessage(), Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                        }
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
     }
 
     private void deleteNotification(String timestamp) {

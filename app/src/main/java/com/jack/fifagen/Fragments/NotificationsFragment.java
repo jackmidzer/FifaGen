@@ -4,6 +4,7 @@ package com.jack.fifagen.Fragments;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -18,6 +19,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.jack.fifagen.Adapters.AdapterNotification;
+import com.jack.fifagen.DashboardActivity;
 import com.jack.fifagen.Models.ModelNotification;
 import com.jack.fifagen.R;
 
@@ -34,6 +36,8 @@ public class NotificationsFragment extends Fragment {
     private ArrayList<ModelNotification> notificationsList;
 
     private AdapterNotification adapterNotification;
+
+    public DashboardActivity dashboardActivity;
 
     //recyclerview
     RecyclerView recyclerView;
@@ -75,7 +79,8 @@ public class NotificationsFragment extends Fragment {
                     notificationsList.add(modelNotification);
                 }
                 //adapter
-                adapterNotification = new AdapterNotification(getActivity(), notificationsList);
+                dashboardActivity = (DashboardActivity) getActivity();
+                adapterNotification = new AdapterNotification(getActivity(), notificationsList, getFragmentManager(), dashboardActivity);
                 recyclerView.setAdapter(adapterNotification);
             }
 

@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/background_18"
     tools:context=".Fragments.ProfileFragment">
 
@@ -84,12 +85,57 @@
 
             </LinearLayout>
 
+            <RadioGroup
+                android:id="@+id/tabLayoutId"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:layout_below="@id/linearLayoutId"
+                android:gravity="center"
+                android:orientation="horizontal" >
+
+                <RadioButton
+                    android:id="@+id/approvedId"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/tab_selector"
+                    android:text="Approved"
+                    android:textSize="18sp"
+                    android:button="@null"
+                    android:checked="true"
+                    android:gravity="center" />
+
+                <RadioButton
+                    android:id="@+id/statsId"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/tab_selector"
+                    android:text="Stats"
+                    android:textSize="18sp"
+                    android:button="@null"
+                    android:gravity="center" />
+
+                <RadioButton
+                    android:id="@+id/pendingId"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/tab_selector"
+                    android:text="Pending"
+                    android:textSize="18sp"
+                    android:button="@null"
+                    android:gravity="center" />
+
+
+            </RadioGroup>
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/matches_recyclerViewId"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_below="@+id/linearLayoutId"/>
-
+                android:layout_below="@+id/tabLayoutId"/>
 
         </RelativeLayout>
 
