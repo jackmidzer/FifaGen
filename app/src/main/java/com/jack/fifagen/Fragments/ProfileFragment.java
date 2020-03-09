@@ -54,6 +54,7 @@ import com.google.firebase.storage.UploadTask;
 import com.jack.fifagen.Activities.MainActivity;
 import com.jack.fifagen.Adapters.AdapterMatch;
 import com.jack.fifagen.Models.ModelMatch;
+import com.jack.fifagen.Models.ModelStats;
 import com.jack.fifagen.R;
 import com.squareup.picasso.Picasso;
 
@@ -82,6 +83,7 @@ public class ProfileFragment extends Fragment {
     //views
     private ImageView avatarIv, coverIv;
     private TextView nameTv, emailTv, phoneTv, noResultsTv;
+    private TextView playedTv, winsTv, drawsTv, lossesTv, goalsForTv, goalsAgainstTv;
     private FloatingActionButton editFab;
     private RadioGroup tabBtns;
     private CardView cardViewLayout;
@@ -135,6 +137,12 @@ public class ProfileFragment extends Fragment {
         tabBtns = view.findViewById(R.id.tabLayoutId);
         noResultsTv = view.findViewById(R.id.noResultsId);
         cardViewLayout = (CardView) view.findViewById(R.id.cardViewId);
+        playedTv = view.findViewById(R.id.playedId);
+        winsTv = view.findViewById(R.id.winsId);
+        drawsTv = view.findViewById(R.id.drawsId);
+        lossesTv = view.findViewById(R.id.lossesId);
+        goalsForTv = view.findViewById(R.id.goalsForId);
+        goalsAgainstTv = view.findViewById(R.id.goalsAgainstId);
 
         //init recycler view
         recyclerView = view.findViewById(R.id.matches_recyclerViewId);
@@ -232,6 +240,7 @@ public class ProfileFragment extends Fragment {
                         //stats
                         noResultsTv.setText("No Stats Recorded");
                         cardViewLayout.setVisibility(View.GONE);
+                        getStats();
                         break;
                     case 2:
                         //pending
@@ -245,6 +254,40 @@ public class ProfileFragment extends Fragment {
         });
 
         return view;
+    }
+
+    private void getStats() {
+        //get current user
+        final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        DatabaseReference reference = database.getReference("Users").child(user.getUid()).child("Stats");
+
+        //get all data
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                    String played = "Played: " + ds.child("played").getValue();
+                    String wins = "Wins: " + ds.child("wins").getValue();
+                    String draws = "Draws: " + ds.child("draws").getValue();
+                    String losses = "Losses: " + ds.child("losses").getValue();
+                    String goalsFor = "Goals For: " + ds.child("goalsFor").getValue();
+                    String goalsAgainst = "Goals Against: " + ds.child("goalsAgainst").getValue();
+
+                    //set data into the views
+                    playedTv.setText(played);
+                    winsTv.setText(wins);
+                    drawsTv.setText(draws);
+                    lossesTv.setText(losses);
+                    goalsForTv.setText(goalsFor);
+                    goalsAgainstTv.setText(goalsAgainst);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     private void getAllMatches(final String status) {

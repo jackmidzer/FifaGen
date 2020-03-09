@@ -23,8 +23,11 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.MutableData;
+import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 import com.jack.fifagen.Models.ModelMatch;
+import com.jack.fifagen.Models.ModelStats;
 import com.jack.fifagen.R;
 import com.squareup.picasso.Picasso;
 
@@ -155,7 +158,7 @@ public class AdapterMatch extends RecyclerView.Adapter<AdapterMatch.MyHolder>{
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot ds: dataSnapshot.getChildren()) {
-                    ModelMatch modelMatch = ds.getValue(ModelMatch.class);
+                    final ModelMatch modelMatch = ds.getValue(ModelMatch.class);
 
                     //get all matches for currently signed in user
                     if ((modelMatch.getHomeUid().equals(user.getUid()) || modelMatch.getAwayUid().equals(user.getUid())) && modelMatch.getMatchId().equals(matchId)) {
@@ -167,6 +170,7 @@ public class AdapterMatch extends RecyclerView.Adapter<AdapterMatch.MyHolder>{
                             reference.child(ds.getKey()).child("isApproved").setValue("approved").addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {
+                                    updateStats(modelMatch);
                                     Toast.makeText(context, "Match approved...", Toast.LENGTH_SHORT).show();
                                 }
                             }).addOnFailureListener(new OnFailureListener() {
@@ -198,6 +202,79 @@ public class AdapterMatch extends RecyclerView.Adapter<AdapterMatch.MyHolder>{
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
+            }
+        });
+    }
+
+    private void updateStats(final ModelMatch modelMatch) {
+        //get current user
+        final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        final DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users").child(user.getUid()).child("Stats");
+        final HashMap<Object, String> hashMap = new HashMap<>();
+
+        //get all data
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                    String playedStr = "" + ds.child("played").getValue();
+                    int played = Integer.parseInt(playedStr);
+                    String winsStr = "Wins: " + ds.child("wins").getValue();
+                    int wins = Integer.parseInt(winsStr);
+                    String drawsStr = "Draws: " + ds.child("draws").getValue();
+                    int draws = Integer.parseInt(drawsStr);
+                    String lossesStr = "Losses: " + ds.child("losses").getValue();
+                    int losses = Integer.parseInt(lossesStr);
+                    String goalsForStr = "Goals For: " + ds.child("goalsFor").getValue();
+                    int goalsFor = Integer.parseInt(goalsForStr);
+                    String goalsAgainstStr = "Goals Against: " + ds.child("goalsAgainst").getValue();
+                    int goalsAgainst = Integer.parseInt(goalsAgainstStr);
+
+                    //increment
+                    played++;
+                    if (user.getUid().equals(modelMatch.getWinner())) {
+                        wins++;
+                    }else if ("none".equals(modelMatch.getWinner())) {
+                        draws++;
+                    }else {
+                        losses++;
+                    }
+                    if (user.getUid().equals(modelMatch.getHomeUid())) {
+                        goalsFor += Integer.parseInt(modelMatch.getHomeScore());
+                        goalsAgainst += Integer.parseInt(modelMatch.getAwayScore());
+                    }else {
+                        goalsFor += Integer.parseInt(modelMatch.getAwayScore());
+                        goalsAgainst += Integer.parseInt(modelMatch.getHomeScore());
+                    }
+
+                    //get user email and uid from auth
+                    String email = user.getEmail();
+                    String uid = user.getUid();
+                    //store user info in firebase db using hashmap
+                    hashMap.put("played", ""+played);
+                    hashMap.put("wins", ""+wins);
+                    hashMap.put("draws", ""+draws);
+                    hashMap.put("losses", ""+losses);
+                    hashMap.put("goalsFor", ""+goalsFor);
+                    hashMap.put("goalsAgainst", ""+goalsAgainst);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+        //put data within hashmap in database
+        reference.child(user.getUid()).child("Stats").setValue(hashMap).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                //added successfully
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                //failed
             }
         });
     }

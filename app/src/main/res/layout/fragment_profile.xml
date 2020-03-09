@@ -156,6 +156,68 @@
 
             </androidx.cardview.widget.CardView>
 
+            <androidx.cardview.widget.CardView
+                android:id="@+id/statsViewId"
+                android:layout_width="match_parent"
+                android:layout_height="240dp"
+                app:cardUseCompatPadding="true"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="2dp"
+                app:cardBackgroundColor="@android:color/white"
+                app:contentPadding="3dp"
+                android:layout_below="@+id/tabLayoutId">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/background_10" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/playedId"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Played:"/>
+
+                    <TextView
+                        android:id="@+id/winsId"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Wins:"/>
+
+                    <TextView
+                        android:id="@+id/drawsId"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Draws:"/>
+
+                    <TextView
+                        android:id="@+id/lossesId"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Losses:"/>
+
+                    <TextView
+                        android:id="@+id/goalsForId"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Goals For:"/>
+
+                    <TextView
+                        android:id="@+id/goalsAgainstId"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Goals Against:"/>
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/matches_recyclerViewId"
                 android:layout_width="match_parent"
