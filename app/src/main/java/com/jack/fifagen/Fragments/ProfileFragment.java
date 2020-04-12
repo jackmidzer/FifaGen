@@ -228,12 +228,12 @@ public class ProfileFragment extends Fragment {
                         matchStatus = "approved";
                         getAllMatches(matchStatus);
                         break;
+//                    case 1:
+//                        //stats
+//                        noResultsTv.setText("No Stats Recorded");
+//                        cardViewLayout.setVisibility(View.GONE);
+//                        break;
                     case 1:
-                        //stats
-                        noResultsTv.setText("No Stats Recorded");
-                        cardViewLayout.setVisibility(View.GONE);
-                        break;
-                    case 2:
                         //pending
                         noResultsTv.setText("No Pending Matches");
                         cardViewLayout.setVisibility(View.GONE);

@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
         awayCountry = findViewById(R.id.awayCountry);
         homeLeague = findViewById(R.id.homeLeague);
         awayLeague = findViewById(R.id.awayLeague);
-        settings = findViewById(R.id.settings);
+//        settings = findViewById(R.id.settings);
         generate = findViewById(R.id.generate);
         homeStars = findViewById(R.id.homeStars);
         awayStars = findViewById(R.id.awayStars);
