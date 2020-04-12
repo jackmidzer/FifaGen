@@ -107,17 +107,6 @@
                     android:gravity="center" />
 
                 <RadioButton
-                    android:id="@+id/statsId"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:background="@drawable/tab_selector"
-                    android:text="Stats"
-                    android:textSize="18sp"
-                    android:button="@null"
-                    android:gravity="center" />
-
-                <RadioButton
                     android:id="@+id/pendingId"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"

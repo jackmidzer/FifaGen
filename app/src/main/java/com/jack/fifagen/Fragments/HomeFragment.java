@@ -87,7 +87,7 @@ public class HomeFragment extends Fragment {
         awayCountry = view.findViewById(R.id.awayCountry);
         homeLeague = view.findViewById(R.id.homeLeague);
         awayLeague = view.findViewById(R.id.awayLeague);
-        settings = view.findViewById(R.id.settings);
+//        settings = view.findViewById(R.id.settings);
         generate = view.findViewById(R.id.generate);
         save = view.findViewById(R.id.save);
         homeStars = view.findViewById(R.id.homeStars);

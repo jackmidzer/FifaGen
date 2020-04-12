@@ -172,11 +172,11 @@ public class TheirProfileActivity extends AppCompatActivity {
                         matchStatus = "approved";
                         getAllMatches(matchStatus);
                         break;
-                    case 1:
-                        //stats
-                        noResultsTv.setText("No Stats Recorded");
-                        cardViewLayout.setVisibility(View.GONE);
-                        break;
+//                    case 1:
+//                        //stats
+//                        noResultsTv.setText("No Stats Recorded");
+//                        cardViewLayout.setVisibility(View.GONE);
+//                        break;
                 }
             }
         });
